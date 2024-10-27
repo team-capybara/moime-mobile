@@ -77,4 +77,6 @@
     <string name="empty_meetings_desc">새로운 모임을 만들어보세요</string>
 
     <string name="date_period_format">%1$d월 %2$d일 - %3$d월 %4$d일</string>
+
+    <string name="api_exception">통신 중 오류가 발생했습니다</string>
 </resources>

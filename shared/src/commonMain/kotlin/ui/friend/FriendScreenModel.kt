@@ -34,7 +34,8 @@ class FriendScreenModel(
         val foundUser: Friend? = null,
         val dialogRequest: DialogRequest? = null,
         val blockedFriendsCount: Int = 0,
-        val blockedFriends: CursorData<Friend> = CursorData()
+        val blockedFriends: CursorData<Friend> = CursorData(),
+        val exception: Throwable? = null
     )
 
     init {
@@ -54,7 +55,7 @@ class FriendScreenModel(
         screenModelScope.launch {
             friendRepository.getMyFriendsCount()
                 .onSuccess { mutableState.value = state.value.copy(friendsCount = it) }
-                .onFailure { /* failed to get friend count */ }
+                .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
 
@@ -69,7 +70,7 @@ class FriendScreenModel(
                     myFriends = state.value.myFriends.concatenate(nextFriends)
                 )
             }.onFailure {
-                /* failed to load my friends */
+                mutableState.value = state.value.copy(exception = it)
             }
         }
     }
@@ -86,7 +87,7 @@ class FriendScreenModel(
                     recommendedFriends = state.value.recommendedFriends.concatenate(nextFriends)
                 )
             }.onFailure {
-                /* failed to load recommended friends */
+                mutableState.value = state.value.copy(exception = it)
             }
         }
     }
@@ -110,7 +111,7 @@ class FriendScreenModel(
                     searchedMyFriends = state.value.searchedMyFriends?.concatenate(nextFriends)
                 )
             }.onFailure {
-                /* failed to load searched my friends */
+                mutableState.value = state.value.copy(exception = it)
             }
         }
     }
@@ -135,7 +136,7 @@ class FriendScreenModel(
                         ?.concatenate(nextFriends)
                 )
             }.onFailure {
-                /* failed to load searched recommended friends */
+                mutableState.value = state.value.copy(exception = it)
             }
         }
     }
@@ -212,7 +213,7 @@ class FriendScreenModel(
         screenModelScope.launch {
             friendRepository.getBlockedFriendsCount()
                 .onSuccess { mutableState.value = state.value.copy(blockedFriendsCount = it) }
-                .onFailure { /* failed to get blocked friends count */ }
+                .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
 
@@ -228,7 +229,7 @@ class FriendScreenModel(
                     blockedFriends = state.value.blockedFriends.concatenate(nextFriends)
                 )
             }.onFailure {
-                /* failed to load blocked friends */
+                mutableState.value = state.value.copy(exception = it)
             }
         }
     }

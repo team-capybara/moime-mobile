@@ -55,6 +55,7 @@ import moime.shared.generated.resources.manage_blocked_friends
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import ui.component.ExceptionDialog
 import ui.component.MoimeDialog
 import ui.component.MoimeFriendBar
 import ui.component.MoimeIconButton
@@ -233,6 +234,12 @@ data class FriendScreen(
             MoimeDialog(
                 request = it,
                 onDismiss = { friendScreenModel.hideDialog() },
+            )
+        }
+        friendState.exception?.let {
+            ExceptionDialog(
+                exception = it,
+                onDismiss = { friendScreenModel.refresh() }
             )
         }
     }

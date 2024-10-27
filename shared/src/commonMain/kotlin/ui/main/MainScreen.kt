@@ -20,6 +20,7 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.ScreenTransition
+import ui.component.ExceptionDialog
 import ui.component.FadeTransition
 import ui.component.MeetingsBottomSheet
 import ui.component.MoimeBottomNavigationBar
@@ -87,8 +88,12 @@ class MainScreen : Screen, ScreenTransition by FadeTransition() {
                     )
                 },
                 content = {
-                    when (mainState) {
-                        MainScreenModel.State.Loading -> MoimeLoading()
+                    when (val state = mainState) {
+                        MainScreenModel.State.Init -> {}
+                        MainScreenModel.State.Loading -> {
+                            MoimeLoading()
+                        }
+
                         is MainScreenModel.State.Success -> {
                             Box {
                                 CurrentTab()
@@ -102,7 +107,12 @@ class MainScreen : Screen, ScreenTransition by FadeTransition() {
                             }
                         }
 
-                        else -> {}
+                        is MainScreenModel.State.Failure -> {
+                            ExceptionDialog(
+                                exception = state.throwable,
+                                onDismiss = { mainScreenModel.refresh() }
+                            )
+                        }
                     }
                 },
                 bottomBar = {

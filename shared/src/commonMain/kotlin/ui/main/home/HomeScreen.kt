@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
+import ui.component.ExceptionDialog
 import ui.component.MoimeLoading
 import ui.main.MainScreenModel
 
@@ -47,6 +48,12 @@ class HomeScreen : Screen {
                     onRefresh = { homeScreenModel.refreshCalendarState() }
                 )
             }
+        }
+        homeState.exception?.let {
+            ExceptionDialog(
+                exception = it,
+                onDismiss = { homeScreenModel.refresh() }
+            )
         }
     }
 }

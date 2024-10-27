@@ -11,10 +11,9 @@ import ui.util.DateUtil.isToday
 
 data class HomeState(
     val homeListState: HomeListState = HomeListState(),
-    val homeCalendarState: HomeCalendarState = HomeCalendarState()
+    val homeCalendarState: HomeCalendarState = HomeCalendarState(),
+    val exception: Throwable? = null
 ) {
-    val isLoading: Boolean = homeListState.isLoading && homeCalendarState.isLoading
-
     fun listStateLoading(value: Boolean) =
         copy(homeListState = homeListState.copy(isLoading = value))
 

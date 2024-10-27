@@ -42,13 +42,15 @@ class FriendDetailScreenModel(
         val meetings: CursorData<Meeting> = CursorData(),
         val meetingsTotalCount: Int = 0,
         val dialogRequest: DialogRequest? = null,
+        val exception: Throwable? = null
     )
 
     init {
         refresh()
     }
 
-    private fun refresh() {
+    fun refresh() {
+        mutableState.value = State(Friend.init(targetId))
         getStranger()
         getMeetingsTotalCount()
         loadMeetings()
@@ -60,6 +62,9 @@ class FriendDetailScreenModel(
                 .onSuccess { stranger ->
                     mutableState.value = state.value.copy(stranger = stranger)
                 }
+                .onFailure {
+                    mutableState.value = state.value.copy(exception = it)
+                }
         }
     }
 
@@ -68,6 +73,9 @@ class FriendDetailScreenModel(
             meetingRepository.getMeetingsCountWith(targetId)
                 .onSuccess { totalCount ->
                     mutableState.value = state.value.copy(meetingsTotalCount = totalCount)
+                }
+                .onFailure {
+                    mutableState.value = state.value.copy(exception = it)
                 }
         }
     }
@@ -82,9 +90,11 @@ class FriendDetailScreenModel(
                         meetings = state.value.meetings.concatenate(nextMeetings)
                     )
                 }.onFailure {
-                    /* failed to load meetings */
                     mutableState.value =
-                        state.value.copy(meetings = state.value.meetings.loading(false))
+                        state.value.copy(
+                            meetings = state.value.meetings.loading(false),
+                            exception = it
+                        )
                 }
         }
     }

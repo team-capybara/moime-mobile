@@ -29,16 +29,25 @@ class MainScreenModel(
         data object Init : State
         data object Loading : State
         data class Success(val user: User) : State
-        data class Failure(val throwable: Throwable?) : State
+        data class Failure(val throwable: Throwable) : State
     }
 
     init {
-        mutableState.value = State.Loading
+        refresh()
+    }
+
+    fun refresh() {
+        mutableState.value = State.Init
+        getUser()
+        refreshUnreadNotification()
+    }
+
+    private fun getUser() {
         screenModelScope.launch {
+            mutableState.value = State.Loading
             userRepository.getUser()
                 .onSuccess { mutableState.value = State.Success(it) }
                 .onFailure { mutableState.value = State.Failure(it) }
-            refreshUnreadNotification()
         }
     }
 
@@ -62,7 +71,7 @@ class MainScreenModel(
         screenModelScope.launch {
             notificationRepository.hasUnreadNotification()
                 .onSuccess { hasUnreadNotification = it }
-                .onFailure { /* failed to get unread notifications */ }
+                .onFailure { mutableState.value = State.Failure(it) }
         }
     }
 }

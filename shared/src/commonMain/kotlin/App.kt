@@ -16,14 +16,13 @@ import dev.chrisbanes.haze.HazeState
 import ui.LocalHazeState
 import ui.LocalScreenSize
 import ui.ScreenSize
+import ui.splash.SplashScreen
 import ui.theme.MoimeTheme
-
 
 @OptIn(ExperimentalVoyagerApi::class)
 @Composable
 fun App() {
     var screenSize by remember { mutableStateOf(ScreenSize()) }
-
     Layout(
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -33,7 +32,7 @@ fun App() {
                         LocalHazeState provides HazeState()
                     ) {
                         Navigator(
-                            screen = ui.splash.SplashScreen(),
+                            screen = SplashScreen(),
                             disposeBehavior = NavigatorDisposeBehavior(disposeSteps = false)
                         ) { navigator ->
                             SlideTransition(

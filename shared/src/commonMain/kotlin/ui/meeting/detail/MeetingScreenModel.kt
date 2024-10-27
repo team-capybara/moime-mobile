@@ -16,12 +16,12 @@ class MeetingScreenModel(meeting: Meeting) :
     }
 
     val webViewUrl = WEBVIEW_BASE_URL + when (meeting.status) {
-        Meeting.Status.Created -> "upcoming-gathering"
-        Meeting.Status.Ongoing -> "ongoing-gathering"
-        Meeting.Status.Finished -> "ended-gathering"
-        Meeting.Status.Completed -> "memory-gathering"
-        else -> "error"
-    } + "?moimId=${meeting.id}"
+        Meeting.Status.Created -> CREATED_MEETING_URL
+        Meeting.Status.Ongoing -> ONGOING_MEETING_URL
+        Meeting.Status.Finished -> FINISHED_MEETING_URL
+        Meeting.Status.Completed -> COMPLETED_MEETING_URL
+        else -> ERROR_URL
+    } + "?$MEETING_ID_KEY=${meeting.id}"
 
     inner class CameraJsMessageHandler : IJsMessageHandler {
 
@@ -42,5 +42,11 @@ class MeetingScreenModel(meeting: Meeting) :
 
     companion object {
         private const val BRIDGE_CAMERA_NAVIGATION_METHOD_NAME = "onNavigateCamera"
+        private const val CREATED_MEETING_URL = "upcoming-gathering"
+        private const val ONGOING_MEETING_URL = "ongoing-gathering"
+        private const val FINISHED_MEETING_URL = "ended-gathering"
+        private const val COMPLETED_MEETING_URL = "memory-gathering"
+        private const val ERROR_URL = "error"
+        private const val MEETING_ID_KEY = "moimId"
     }
 }

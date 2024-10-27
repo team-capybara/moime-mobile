@@ -8,15 +8,21 @@ import ui.repository.InsightRepository
 
 class InsightScreenModel(
     private val insightRepository: InsightRepository
-) : StateScreenModel<InsightScreenModel.State>(State.Loading) {
+) : StateScreenModel<InsightScreenModel.State>(State.Init) {
 
     sealed interface State {
+        data object Init : State
         data object Loading : State
         data class Success(val summary: InsightSummary) : State
-        data class Failure(val throwable: Throwable?) : State
+        data class Failure(val throwable: Throwable) : State
     }
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
+        mutableState.value = State.Init
         getInsightSummary()
     }
 

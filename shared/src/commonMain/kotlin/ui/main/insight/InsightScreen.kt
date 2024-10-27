@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
+import ui.component.ExceptionDialog
 import ui.component.MoimeLoading
 import ui.main.MainScreenModel
 
@@ -21,6 +22,8 @@ class InsightScreen : Screen {
         val insightState by insightScreenModel.state.collectAsState()
 
         when (val state = insightState) {
+            InsightScreenModel.State.Init -> {}
+
             InsightScreenModel.State.Loading -> {
                 MoimeLoading()
             }
@@ -36,7 +39,10 @@ class InsightScreen : Screen {
             }
 
             is InsightScreenModel.State.Failure -> {
-                // failed to load insight summary
+                ExceptionDialog(
+                    exception = state.throwable,
+                    onDismiss = { insightScreenModel.refresh() }
+                )
             }
         }
     }

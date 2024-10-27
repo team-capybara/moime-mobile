@@ -12,6 +12,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import ui.component.ExceptionDialog
 import ui.component.MoimeImagePicker
 import ui.component.MoimeWebView
 import ui.jsbridge.ImagePickerResponse
@@ -30,17 +31,9 @@ class LoginScreen : Screen {
         val loginState by screenModel.state.collectAsState()
 
         LaunchedEffect(loginState) {
-            when (val state = loginState) {
-                is LoginScreenModel.State.InProgress -> {
-                }
-
-                is LoginScreenModel.State.Success -> {
-                    navigator.replace(if (state.isNewbie) OnboardingScreen() else MainScreen())
-                }
-
-                is LoginScreenModel.State.Failure -> {
-                    // fail to login
-                }
+            val state = loginState
+            if (state is LoginScreenModel.State.Success) {
+                navigator.replace(if (state.isNewbie) OnboardingScreen() else MainScreen())
             }
         }
 
@@ -59,6 +52,13 @@ class LoginScreen : Screen {
                     callback(Json.encodeToString(ImagePickerResponse(it.encodeToBase64())))
                 }
             })
+        }
+
+        (loginState as? LoginScreenModel.State.Failure)?.throwable?.let {
+            ExceptionDialog(
+                exception = it,
+                onDismiss = { navigator.pop() }
+            )
         }
     }
 }

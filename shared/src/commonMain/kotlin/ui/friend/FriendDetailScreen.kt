@@ -53,6 +53,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import ui.component.ExceptionDialog
 import ui.component.MoimeDialog
 import ui.component.MoimeMeetingCard
 import ui.component.MoimeProfileImage
@@ -208,6 +209,12 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
             MoimeDialog(
                 request = it,
                 onDismiss = { screenModel.hideDialog() },
+            )
+        }
+        state.exception?.let {
+            ExceptionDialog(
+                exception = it,
+                onDismiss = { screenModel.refresh() }
             )
         }
     }

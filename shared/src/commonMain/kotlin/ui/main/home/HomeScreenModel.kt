@@ -16,7 +16,7 @@ class HomeScreenModel(
     }
 
     fun refresh() {
-        println("refreshed homeScreen")
+        mutableState.value = HomeState()
         refreshListState()
         refreshCalendarState()
     }
@@ -30,7 +30,7 @@ class HomeScreenModel(
                     mutableState.value = state.value.updateCompletedMeetings(it)
                     mutableState.value = state.value.listStateLoading(false)
                 }
-                .onFailure { println("failed to load completed meetings: ${it.message}") }
+                .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
 
@@ -38,7 +38,7 @@ class HomeScreenModel(
         screenModelScope.launch {
             meetingRepository.getAllOngoingMeetings()
                 .onSuccess { mutableState.value = state.value.setOngoingMeetings(it) }
-                .onFailure { println("failed to load ongoing meetings: ${it.message}") }
+                .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
 
@@ -46,7 +46,7 @@ class HomeScreenModel(
         screenModelScope.launch {
             meetingRepository.getAllUpcomingMeetings()
                 .onSuccess { mutableState.value = state.value.setUpcomingMeetings(it) }
-                .onFailure { println("failed to load upcoming meetings: ${it.message}") }
+                .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
 
@@ -69,7 +69,7 @@ class HomeScreenModel(
         screenModelScope.launch {
             meetingRepository.getMeetingsCount(from, to)
                 .onSuccess { mutableState.value = state.value.setMeetingCount(it) }
-                .onFailure { /* failed to load meeting count */ }
+                .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
 
@@ -77,7 +77,7 @@ class HomeScreenModel(
         screenModelScope.launch {
             meetingRepository.getMeetingsOfDay(date)
                 .onSuccess { callback(it) }
-                .onFailure { /* failed to load meetings of day */ }
+                .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
 }
