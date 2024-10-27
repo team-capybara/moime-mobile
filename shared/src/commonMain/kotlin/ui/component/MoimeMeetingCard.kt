@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,7 +52,9 @@ import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
 import moime.shared.generated.resources.Res
 import moime.shared.generated.resources.from_start
+import moime.shared.generated.resources.img_meeting_thumbnail
 import moime.shared.generated.resources.to_start
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import ui.LocalScreenSize
 import ui.model.Meeting
@@ -165,6 +168,20 @@ fun MoimeMeetingCard(
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
+                        }
+                    } ?: run {
+                        if (isToday) Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 48.dp)
+                        ) {
+                            Spacer(Modifier.weight(141f))
+                            Image(
+                                painterResource(Res.drawable.img_meeting_thumbnail),
+                                contentDescription = null,
+                                contentScale = ContentScale.FillWidth
+                            )
+                            Spacer(Modifier.weight(97f))
                         }
                     }
                     androidx.compose.animation.AnimatedVisibility(
