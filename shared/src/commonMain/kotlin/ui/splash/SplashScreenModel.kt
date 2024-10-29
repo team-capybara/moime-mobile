@@ -2,6 +2,7 @@ package ui.splash
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ui.repository.UserRepository
 
@@ -17,9 +18,14 @@ class SplashScreenModel(
 
     init {
         screenModelScope.launch {
+            delay(SPLASH_DELAY_MILLIS)
             userRepository.getUser()
                 .onSuccess { mutableState.value = State.Authorized }
                 .onFailure { mutableState.value = State.Unauthorized }
         }
+    }
+
+    companion object {
+        private const val SPLASH_DELAY_MILLIS = 1000L
     }
 }
