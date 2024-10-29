@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
@@ -19,9 +18,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import cafe.adriel.voyager.transitions.ScreenTransition
 import ui.component.ExceptionDialog
-import ui.component.FadeTransition
 import ui.component.MeetingsBottomSheet
 import ui.component.MoimeBottomNavigationBar
 import ui.component.MoimeLoading
@@ -35,8 +32,7 @@ import ui.model.User
 import ui.mypage.MyPageScreen
 import ui.notification.NotificationScreen
 
-@OptIn(ExperimentalVoyagerApi::class)
-class MainScreen : Screen, ScreenTransition by FadeTransition() {
+class MainScreen : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
 
