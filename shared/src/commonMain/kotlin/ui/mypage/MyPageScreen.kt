@@ -1,6 +1,7 @@
 package ui.mypage
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import ui.jsbridge.ACCESS_TOKEN_KEY
 import ui.jsbridge.ImagePickerResponse
 import ui.jsbridge.PopHandler
 import ui.jsbridge.WEBVIEW_BASE_URL
+import ui.login.LoginScreen
 import ui.util.Base64Util.encodeToBase64
 
 class MyPageScreen : Screen, KoinComponent {
@@ -44,12 +46,16 @@ class MyPageScreen : Screen, KoinComponent {
         val screenModel = rememberScreenModel { MyPageScreenModel(permissionController) }
         val state by screenModel.state.collectAsState()
 
+        LaunchedEffect(state.logoutRequired) {
+            if (state.logoutRequired) {
+                navigator.replaceAll(LoginScreen())
+            }
+        }
 
         MoimeWebView(
             url = WEBVIEW_BASE_URL + MyPageScreenModel.WEBVIEW_URL_PATH_MY_PAGE,
             accessToken = settings.getString(ACCESS_TOKEN_KEY, ""),
-            jsMessageHandlers = listOf(
-                screenModel.MyPageJsMessageHandler(),
+            jsMessageHandlers = screenModel.jsMessageHandler.getHandlers() + listOf(
                 screenModel.imagePickerHandler,
                 popHandler
             )

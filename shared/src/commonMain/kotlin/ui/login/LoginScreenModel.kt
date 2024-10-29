@@ -52,6 +52,10 @@ class LoginScreenModel(
         override fun methodName(): String = BRIDGE_LOGIN_METHOD_NAME
     }
 
+    fun reset() {
+        mutableState.value = State.InProgress()
+    }
+
     companion object {
         const val WEBVIEW_LOGIN_URL = "https://www.moime.app/"
         private const val BRIDGE_LOGIN_METHOD_NAME = "onLoginSuccess"
