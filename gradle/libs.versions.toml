@@ -30,7 +30,7 @@ moko-mvvm = "0.16.1"
 moko-permissions = "0.18.0"
 moko-geo = "0.7.0"
 
-webview = "1.9.20"
+webview = "1.9.40-alpha03"
 settings = "1.1.1"
 
 gms = "4.4.2"

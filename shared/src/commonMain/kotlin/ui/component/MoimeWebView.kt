@@ -13,6 +13,7 @@ import com.multiplatform.webview.jsbridge.rememberWebViewJsBridge
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewNavigator
 import com.multiplatform.webview.web.rememberWebViewState
+import ui.theme.Gray700
 
 @OptIn(InternalVoyagerApi::class)
 @Composable
@@ -36,6 +37,12 @@ fun MoimeWebView(
                     value = "Bearer $it"
                 )
             )
+        }
+        webViewState.webSettings.iOSWebSettings.apply {
+            backgroundColor = Gray700
+            bounces = false
+            showVerticalScrollIndicator = false
+            showHorizontalScrollIndicator = false
         }
     }
 
