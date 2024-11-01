@@ -1,6 +1,7 @@
 package ui.friend
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,12 +18,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import moime.shared.generated.resources.Res
 import moime.shared.generated.resources.add_friend
+import moime.shared.generated.resources.friendship_date_until
 import moime.shared.generated.resources.input_friend_code
 import moime.shared.generated.resources.it_is_me
 import moime.shared.generated.resources.my_friend_code
@@ -47,6 +52,8 @@ fun FriendFindContent(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val navigator = LocalNavigator.currentOrThrow
+
     Column(
         modifier = modifier.then(Modifier.fillMaxWidth())
     ) {
@@ -82,6 +89,7 @@ fun FriendFindContent(
         ) {
             FriendFindCard(
                 foundUser = foundUser,
+                onClick = { navigator.push(FriendDetailScreen(it.id)) },
                 onAddFriend = onAddFriend,
                 myCode = myCode
             )
@@ -92,12 +100,19 @@ fun FriendFindContent(
 @Composable
 private fun FriendFindCard(
     foundUser: Friend?,
+    onClick: (Friend) -> Unit,
     onAddFriend: (Friend) -> Unit,
     myCode: String,
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier,
+        modifier = modifier.then(
+            Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .clickable {
+                    foundUser?.let { if (it.code != myCode) onClick(it) }
+                }
+        ),
         color = Gray500,
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -148,7 +163,10 @@ private fun FriendFindCard(
             } else {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "친구가 된지 ${foundUser.friendshipDateTime.daysUntilNow()}일째",
+                    text = stringResource(
+                        Res.string.friendship_date_until,
+                        foundUser.friendshipDateTime.daysUntilNow()
+                    ),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
                     color = Gray400

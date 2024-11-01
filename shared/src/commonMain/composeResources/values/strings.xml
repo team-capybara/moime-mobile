@@ -46,6 +46,7 @@
     <string name="failed_to_block_friend">차단에 실패했어요</string>
     <string name="failed_to_block_friend_desc">친구 차단 중 오류가 발생했습니다</string>
     <string name="people_count">%1$d명</string>
+    <string name="friendship_date_until">친구가 된지 %1$d일째</string>
 
     <string name="profile">프로필</string>
     <string name="block">차단</string>
