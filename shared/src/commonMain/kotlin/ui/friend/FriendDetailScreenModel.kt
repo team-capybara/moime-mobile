@@ -227,4 +227,8 @@ class FriendDetailScreenModel(
     fun hideDialog() {
         mutableState.value = state.value.copy(dialogRequest = null)
     }
+
+    fun clearException() {
+        mutableState.value = state.value.copy(exception = null)
+    }
 }

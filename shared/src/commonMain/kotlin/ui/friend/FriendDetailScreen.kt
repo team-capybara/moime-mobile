@@ -214,7 +214,7 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
         state.exception?.let {
             ExceptionDialog(
                 exception = it,
-                onDismiss = { screenModel.refresh() }
+                onDismiss = { screenModel.clearException() }
             )
         }
     }

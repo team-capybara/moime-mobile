@@ -239,7 +239,7 @@ data class FriendScreen(
         friendState.exception?.let {
             ExceptionDialog(
                 exception = it,
-                onDismiss = { friendScreenModel.refresh() }
+                onDismiss = { friendScreenModel.clearException() }
             )
         }
     }

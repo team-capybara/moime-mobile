@@ -80,4 +80,8 @@ class HomeScreenModel(
                 .onFailure { mutableState.value = state.value.copy(exception = it) }
         }
     }
+
+    fun clearException() {
+        mutableState.value = state.value.copy(exception = null)
+    }
 }

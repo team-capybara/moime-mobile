@@ -106,7 +106,7 @@ class MainScreen : Screen {
                         is MainScreenModel.State.Failure -> {
                             ExceptionDialog(
                                 exception = state.throwable,
-                                onDismiss = { mainScreenModel.refresh() }
+                                onDismiss = { mainScreenModel.clearException() }
                             )
                         }
                     }

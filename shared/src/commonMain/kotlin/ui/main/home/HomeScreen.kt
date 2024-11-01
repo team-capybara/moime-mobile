@@ -52,7 +52,7 @@ class HomeScreen : Screen {
         homeState.exception?.let {
             ExceptionDialog(
                 exception = it,
-                onDismiss = { homeScreenModel.refresh() }
+                onDismiss = { homeScreenModel.clearException() }
             )
         }
     }

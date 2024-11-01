@@ -41,7 +41,7 @@ class InsightScreen : Screen {
             is InsightScreenModel.State.Failure -> {
                 ExceptionDialog(
                     exception = state.throwable,
-                    onDismiss = { insightScreenModel.refresh() }
+                    onDismiss = { insightScreenModel.clearException() }
                 )
             }
         }

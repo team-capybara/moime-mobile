@@ -74,4 +74,8 @@ class MainScreenModel(
                 .onFailure { mutableState.value = State.Failure(it) }
         }
     }
+
+    fun clearException() {
+        mutableState.value = State.Init
+    }
 }
