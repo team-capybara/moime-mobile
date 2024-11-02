@@ -31,15 +31,6 @@ fun MoimeWebView(
     val webViewState = rememberWebViewState(url)
     val jsBridge = rememberWebViewJsBridge(webViewNavigator)
 
-    LaunchedEffect(Unit) {
-        webViewState.webSettings.iOSWebSettings.apply {
-            backgroundColor = Gray700
-            bounces = false
-            showVerticalScrollIndicator = false
-            showHorizontalScrollIndicator = false
-        }
-    }
-
     LaunchedEffect(webViewState) {
         snapshotFlow { webViewState.loadingState }
             .filter { it is LoadingState.Finished }
@@ -71,7 +62,12 @@ fun MoimeWebView(
     SafeAreaColumn {
         Box {
             WebView(
-                state = webViewState,
+                state = webViewState.apply {
+                    webSettings.apply {
+                        backgroundColor = Gray700
+                        iOSWebSettings.bounces = false
+                    }
+                },
                 navigator = webViewNavigator,
                 webViewJsBridge = jsBridge,
                 modifier = modifier.then(Modifier.fillMaxSize())
