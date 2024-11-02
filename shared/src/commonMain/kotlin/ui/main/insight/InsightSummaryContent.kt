@@ -61,7 +61,10 @@ fun InsightSummaryContent(
                         }
                         scope.launch {
                             delay(10L)
-                            listState.animateScrollBy(scrollOffset)
+                            with(listState) {
+                                scrollToItem(0)
+                                animateScrollBy(scrollOffset)
+                            }
                         }
                     }
 
