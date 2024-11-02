@@ -65,7 +65,6 @@ fun MoimeWebView(
                 state = webViewState.apply {
                     webSettings.apply {
                         backgroundColor = Gray700
-                        iOSWebSettings.bounces = false
                     }
                 },
                 navigator = webViewNavigator,
