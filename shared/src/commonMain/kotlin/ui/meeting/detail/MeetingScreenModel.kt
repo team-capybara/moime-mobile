@@ -1,11 +1,17 @@
 package ui.meeting.detail
 
 import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.multiplatform.webview.jsbridge.IJsMessageHandler
 import com.multiplatform.webview.jsbridge.JsMessage
 import com.multiplatform.webview.web.WebViewNavigator
+import io.github.vinceglb.filekit.core.FileKit
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import ui.jsbridge.ImageDownloadHandler
 import ui.jsbridge.WEBVIEW_BASE_URL
 import ui.model.Meeting
+import ui.util.DateUtil.now
 
 class MeetingScreenModel(meeting: Meeting) :
     StateScreenModel<MeetingScreenModel.State>(State.Init) {
@@ -22,6 +28,19 @@ class MeetingScreenModel(meeting: Meeting) :
         Meeting.Status.Completed -> COMPLETED_MEETING_URL
         else -> ERROR_URL
     } + "?$MEETING_ID_KEY=${meeting.id}"
+
+    val imageDownloadHandler = ImageDownloadHandler(
+        methodName = BRIDGE_DOWNLOAD_IMAGE_METHOD_NAME,
+        onDownload = {
+            screenModelScope.launch {
+                FileKit.saveFile(
+                    baseName = "moime-${LocalDateTime.now()}",
+                    extension = "jpg",
+                    bytes = it
+                )
+            }
+        }
+    )
 
     inner class CameraJsMessageHandler : IJsMessageHandler {
 
@@ -42,6 +61,8 @@ class MeetingScreenModel(meeting: Meeting) :
 
     companion object {
         private const val BRIDGE_CAMERA_NAVIGATION_METHOD_NAME = "onNavigateCamera"
+        private const val BRIDGE_DOWNLOAD_IMAGE_METHOD_NAME = "onDownloadEndingImage"
+
         private const val CREATED_MEETING_URL = "upcoming-gathering"
         private const val ONGOING_MEETING_URL = "ongoing-gathering"
         private const val FINISHED_MEETING_URL = "ended-gathering"

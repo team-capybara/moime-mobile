@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.permission.permissionUtil
+import io.github.vinceglb.filekit.core.FileKit
 import ui.util.ShareUtil
 
 class MainActivity : ComponentActivity() {
@@ -20,6 +21,7 @@ class MainActivity : ComponentActivity() {
         setSystemBarStyle()
         initNotifier()
         ShareUtil.setActivityProvider { return@setActivityProvider this }
+        FileKit.init(this)
         setContent {
             App()
         }
