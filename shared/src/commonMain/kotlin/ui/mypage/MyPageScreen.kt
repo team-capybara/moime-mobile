@@ -5,12 +5,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.internal.BackHandler
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
@@ -21,10 +24,11 @@ import org.koin.core.component.inject
 import ui.component.MoimeImagePicker
 import ui.component.MoimeWebView
 import ui.jsbridge.ACCESS_TOKEN_KEY
-import ui.jsbridge.ImagePickerResponse
+import ui.jsbridge.ImageStringData
 import ui.jsbridge.PopHandler
 import ui.jsbridge.WEBVIEW_BASE_URL
 import ui.login.LoginScreen
+import ui.main.MainScreenModel
 import ui.util.Base64Util.encodeToBase64
 
 class MyPageScreen : Screen, KoinComponent {
@@ -32,10 +36,10 @@ class MyPageScreen : Screen, KoinComponent {
     private val settings: Settings by inject()
     override val key: ScreenKey = uniqueScreenKey
 
+    @OptIn(InternalVoyagerApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val popHandler = PopHandler { navigator.pop() }
 
         val permissionFactory = rememberPermissionsControllerFactory()
         val permissionController = remember(permissionFactory) {
@@ -43,8 +47,18 @@ class MyPageScreen : Screen, KoinComponent {
         }
         BindEffect(permissionController)
 
-        val screenModel = rememberScreenModel { MyPageScreenModel(permissionController) }
-        val state by screenModel.state.collectAsState()
+        val mainScreenModel = koinScreenModel<MainScreenModel>()
+        val myPageScreenModel = rememberScreenModel { MyPageScreenModel(permissionController) }
+        val state by myPageScreenModel.state.collectAsState()
+        val popHandler = PopHandler {
+            navigator.pop()
+            mainScreenModel.refresh()
+        }
+
+        BackHandler(true) {
+            navigator.pop()
+            mainScreenModel.refresh()
+        }
 
         LaunchedEffect(state.logoutRequired) {
             if (state.logoutRequired) {
@@ -55,8 +69,8 @@ class MyPageScreen : Screen, KoinComponent {
         MoimeWebView(
             url = WEBVIEW_BASE_URL + MyPageScreenModel.WEBVIEW_URL_PATH_MY_PAGE,
             accessToken = settings.getString(ACCESS_TOKEN_KEY, ""),
-            jsMessageHandlers = screenModel.jsMessageHandler.getHandlers() + listOf(
-                screenModel.imagePickerHandler,
+            jsMessageHandlers = myPageScreenModel.jsMessageHandler.getHandlers() + listOf(
+                myPageScreenModel.imagePickerHandler,
                 popHandler
             )
         )
@@ -64,7 +78,7 @@ class MyPageScreen : Screen, KoinComponent {
         state.onImagePicked?.let { callback ->
             MoimeImagePicker(onPicked = { images ->
                 images.firstOrNull()?.let {
-                    callback(Json.encodeToString(ImagePickerResponse(it.encodeToBase64())))
+                    callback(Json.encodeToString(ImageStringData(it.encodeToBase64())))
                 }
             })
         }

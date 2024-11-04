@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 import ui.component.ExceptionDialog
 import ui.component.MoimeImagePicker
 import ui.component.MoimeWebView
-import ui.jsbridge.ImagePickerResponse
+import ui.jsbridge.ImageStringData
 import ui.main.MainScreen
 import ui.onboarding.OnboardingScreen
 import ui.util.Base64Util.encodeToBase64
@@ -49,7 +49,7 @@ class LoginScreen : Screen {
         (loginState as? LoginScreenModel.State.InProgress)?.onImagePicked?.let { callback ->
             MoimeImagePicker(onPicked = { images ->
                 images.firstOrNull()?.let {
-                    callback(Json.encodeToString(ImagePickerResponse(it.encodeToBase64())))
+                    callback(Json.encodeToString(ImageStringData(it.encodeToBase64())))
                 }
             })
         }

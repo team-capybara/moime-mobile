@@ -1,12 +1,14 @@
 package ui.notification
 
 import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.internal.BackHandler
 import com.russhwolf.settings.Settings
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -21,11 +23,17 @@ class NotificationScreen : Screen, KoinComponent {
     override val key: ScreenKey = uniqueScreenKey
     private val settings: Settings by inject()
 
+    @OptIn(InternalVoyagerApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val mainScreenModel = koinScreenModel<MainScreenModel>()
         val popHandler = PopHandler {
+            mainScreenModel.refreshUnreadNotification()
+            navigator.pop()
+        }
+
+        BackHandler(true) {
             mainScreenModel.refreshUnreadNotification()
             navigator.pop()
         }

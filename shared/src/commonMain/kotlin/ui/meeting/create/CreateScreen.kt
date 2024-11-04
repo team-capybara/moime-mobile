@@ -1,12 +1,14 @@
 package ui.meeting.create
 
 import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.internal.BackHandler
 import com.russhwolf.settings.Settings
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -21,11 +23,17 @@ class CreateScreen : Screen, KoinComponent {
     private val settings: Settings by inject()
     override val key: ScreenKey = uniqueScreenKey
 
+    @OptIn(InternalVoyagerApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val homeScreenModel = koinScreenModel<HomeScreenModel>()
         val popHandler = PopHandler {
+            navigator.pop()
+            homeScreenModel.refresh()
+        }
+
+        BackHandler(true) {
             navigator.pop()
             homeScreenModel.refresh()
         }
