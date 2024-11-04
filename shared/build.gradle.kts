@@ -75,6 +75,9 @@ kotlin {
 
             implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
+
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.compose)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)

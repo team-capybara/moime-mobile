@@ -56,6 +56,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.koin.core)
+    implementation(libs.filekit.core)
 
     coreLibraryDesugaring(libs.android.desugar)
 }

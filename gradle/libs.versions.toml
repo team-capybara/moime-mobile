@@ -43,7 +43,7 @@ calendar = "1.0.1"
 peekaboo = "0.5.2"
 pullrefresh = "1.4.0-beta03"
 kim = "0.18.4"
-filekit = "0.8.2"
+filekit = "0.8.7"
 okio = "3.9.1"
 
 desugar = "2.1.2"
@@ -79,7 +79,6 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "lo
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
-voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-lifecycle-kmp = { module = "cafe.adriel.voyager:voyager-lifecycle-kmp", version.ref = "voyager" }
@@ -95,6 +94,9 @@ moko-geo-compose = { group = "dev.icerock.moko", name = "geo-compose", version.r
 
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
 settings-noarg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "settings" }
+
+filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "filekit" }
+filekit-compose = { group = "io.github.vinceglb", name = "filekit-compose", version.ref = "filekit" }
 
 kmpnotifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "kmpnotifier" }
 stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }

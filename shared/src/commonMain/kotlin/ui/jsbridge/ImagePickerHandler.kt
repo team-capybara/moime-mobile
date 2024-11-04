@@ -3,7 +3,6 @@ package ui.jsbridge
 import com.multiplatform.webview.jsbridge.IJsMessageHandler
 import com.multiplatform.webview.jsbridge.JsMessage
 import com.multiplatform.webview.web.WebViewNavigator
-import kotlinx.serialization.Serializable
 
 class ImagePickerHandler(
     private val onHandle: ((callback: (String) -> Unit) -> Unit)
@@ -23,8 +22,3 @@ class ImagePickerHandler(
         private const val METHOD_NAME = "onPickImage"
     }
 }
-
-@Serializable
-data class ImagePickerResponse(
-    val image: String
-)
