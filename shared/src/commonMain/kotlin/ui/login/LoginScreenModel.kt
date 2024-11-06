@@ -57,7 +57,7 @@ class LoginScreenModel(
     }
 
     companion object {
-        const val WEBVIEW_LOGIN_URL = "https://www.moime.app/"
+        const val WEBVIEW_LOGIN_URL = "https://www.moime.app/login"
         private const val BRIDGE_LOGIN_METHOD_NAME = "onLoginSuccess"
     }
 }
