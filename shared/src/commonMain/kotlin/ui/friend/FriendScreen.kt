@@ -130,8 +130,8 @@ data class FriendScreen(
                         myCode = user?.code ?: "",
                         foundUser = friendState.foundUser,
                         onSearch = { friendScreenModel.findUser(it) },
-                        onAddFriend = {
-                            friendScreenModel.addFriend(it) {
+                        onAddFriend = { targetFriend ->
+                            friendScreenModel.addFriend(targetFriend) {
                                 navigator.popUntilRoot()
                                 navigator.push(CreateScreen())
                             }
@@ -170,20 +170,26 @@ data class FriendScreen(
                 when (selectedTabView) {
                     is FriendTabView.MyFriend -> {
                         friendState.searchedMyFriends?.data?.let {
-                            items(it) { friend ->
+                            items(it) { searchedMyFriend ->
                                 MoimeFriendBar(
-                                    friend = friend,
+                                    friend = searchedMyFriend,
                                     modifier = Modifier
-                                        .clickable { navigator.push(FriendDetailScreen(friend.id)) }
+                                        .clickable {
+                                            navigator.push(
+                                                FriendDetailScreen(
+                                                    searchedMyFriend.id
+                                                )
+                                            )
+                                        }
                                         .padding(start = 7.5.dp)
                                 )
                                 Spacer(Modifier.height(16.dp))
                             }
-                        } ?: items(friendState.myFriends.data) { friend ->
+                        } ?: items(friendState.myFriends.data) { myFriend ->
                             MoimeFriendBar(
-                                friend = friend,
+                                friend = myFriend,
                                 modifier = Modifier
-                                    .clickable { navigator.push(FriendDetailScreen(friend.id)) }
+                                    .clickable { navigator.push(FriendDetailScreen(myFriend.id)) }
                                     .padding(start = 7.5.dp)
                             )
                             Spacer(Modifier.height(16.dp))
@@ -192,36 +198,42 @@ data class FriendScreen(
 
                     is FriendTabView.RecommendedFriend -> {
                         friendState.searchedRecommendedFriends?.data?.let {
-                            items(it) { friend ->
+                            items(it) { searchedRecommendedFriend ->
                                 MoimeFriendBar(
-                                    friend = friend,
+                                    friend = searchedRecommendedFriend,
                                     action = {
                                         MoimeIconButton(Res.drawable.ic_add) {
-                                            friendScreenModel.addFriend(friend) {
+                                            friendScreenModel.addFriend(searchedRecommendedFriend) {
                                                 navigator.popUntilRoot()
                                                 navigator.push(CreateScreen())
                                             }
                                         }
                                     },
                                     modifier = Modifier
-                                        .clickable { navigator.push(FriendDetailScreen(friend.id)) }
+                                        .clickable {
+                                            navigator.push(
+                                                FriendDetailScreen(
+                                                    searchedRecommendedFriend.id
+                                                )
+                                            )
+                                        }
                                         .padding(start = 7.5.dp)
                                 )
                                 Spacer(Modifier.height(16.dp))
                             }
-                        } ?: items(friendState.recommendedFriends.data) { friend ->
+                        } ?: items(friendState.recommendedFriends.data) { recommendedFriend ->
                             MoimeFriendBar(
-                                friend = friend,
+                                friend = recommendedFriend,
                                 action = {
                                     MoimeIconButton(Res.drawable.ic_add) {
-                                        friendScreenModel.addFriend(friend) {
+                                        friendScreenModel.addFriend(recommendedFriend) {
                                             navigator.popUntilRoot()
                                             navigator.push(CreateScreen())
                                         }
                                     }
                                 },
                                 modifier = Modifier
-                                    .clickable { navigator.push(FriendDetailScreen(friend.id)) }
+                                    .clickable { navigator.push(FriendDetailScreen(recommendedFriend.id)) }
                                     .padding(start = 7.5.dp)
                             )
                             Spacer(Modifier.height(16.dp))

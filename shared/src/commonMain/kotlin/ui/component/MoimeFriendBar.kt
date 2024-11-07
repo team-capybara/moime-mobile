@@ -38,6 +38,7 @@ fun MoimeFriendBar(
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Medium,
             overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             modifier = Modifier.weight(1f)
         )
         action?.let { it() }

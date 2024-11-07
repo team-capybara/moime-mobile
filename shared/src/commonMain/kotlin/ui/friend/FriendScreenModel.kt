@@ -105,7 +105,8 @@ class FriendScreenModel(
                 mutableState.value = state.value.copy(searchedMyFriends = CursorData())
             }
             friendRepository.getMyFriends(
-                cursor = state.value.searchedMyFriends?.nextRequest() ?: return@launch
+                cursor = state.value.searchedMyFriends?.nextRequest() ?: return@launch,
+                nickname = nickname
             ).onSuccess { nextFriends ->
                 mutableState.value = state.value.copy(
                     searchedMyFriends = state.value.searchedMyFriends?.concatenate(nextFriends)
@@ -129,7 +130,8 @@ class FriendScreenModel(
                 mutableState.value = state.value.copy(searchedRecommendedFriends = CursorData())
             }
             friendRepository.getRecommendedFriends(
-                cursor = state.value.searchedRecommendedFriends?.nextRequest() ?: return@launch
+                cursor = state.value.searchedRecommendedFriends?.nextRequest() ?: return@launch,
+                nickname = nickname
             ).onSuccess { nextFriends ->
                 mutableState.value = state.value.copy(
                     searchedRecommendedFriends = state.value.searchedRecommendedFriends
