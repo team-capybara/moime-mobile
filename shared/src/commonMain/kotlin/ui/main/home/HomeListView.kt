@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,6 +52,7 @@ import moime.shared.generated.resources.img_empty_meetings
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import ui.LocalHazeState
+import ui.LocalScreenSize
 import ui.component.BOTTOM_NAV_BAR_HEIGHT
 import ui.component.HOME_TOP_APP_BAR_HEIGHT
 import ui.component.MOIME_CARD_HEIGHT
@@ -76,8 +76,15 @@ fun HomeListView(
     val navigator = LocalNavigator.currentOrThrow
     val hazeState = LocalHazeState.current
     val density = LocalDensity.current
+    val screenSize = LocalScreenSize.current
     val statusBarHeight = with(density) {
         WindowInsets.statusBars.getTop(this).toDp()
+    }
+    val systemBarHeightInPixels = with(density) {
+        WindowInsets.statusBars.getTop(this) + WindowInsets.navigationBars.getBottom(this)
+    }
+    val emptyCardHeight = with(density) {
+        (screenSize.height - systemBarHeightInPixels - (8 * 2).dp.roundToPx()).toDp()
     }
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isLoading,
@@ -186,8 +193,8 @@ fun HomeListView(
                         modifier = Modifier
                             .background(color = Gray500, shape = RoundedCornerShape(20.dp))
                             .fillMaxWidth()
-                            .aspectRatio(326 / 460f)
-                            .padding(horizontal = 37.dp),
+                            .height(emptyCardHeight)
+                            .padding(horizontal = 35.dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
