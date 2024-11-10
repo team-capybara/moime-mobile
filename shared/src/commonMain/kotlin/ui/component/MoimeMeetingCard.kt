@@ -170,18 +170,20 @@ fun MoimeMeetingCard(
                             }
                         }
                     } ?: run {
-                        if (isToday) Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 48.dp)
-                        ) {
-                            Spacer(Modifier.weight(141f))
-                            Image(
-                                painterResource(Res.drawable.img_meeting_thumbnail),
-                                contentDescription = null,
-                                contentScale = ContentScale.FillWidth
-                            )
-                            Spacer(Modifier.weight(97f))
+                        if (isToday && !forceDefaultHeightStyle) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 56.dp)
+                            ) {
+                                Spacer(Modifier.weight(141f))
+                                Image(
+                                    painterResource(Res.drawable.img_meeting_thumbnail),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth
+                                )
+                                Spacer(Modifier.weight(97f))
+                            }
                         }
                     }
                     androidx.compose.animation.AnimatedVisibility(

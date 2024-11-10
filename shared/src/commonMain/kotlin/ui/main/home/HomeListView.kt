@@ -84,7 +84,11 @@ fun HomeListView(
         WindowInsets.statusBars.getTop(this) + WindowInsets.navigationBars.getBottom(this)
     }
     val emptyCardHeight = with(density) {
-        (screenSize.height - systemBarHeightInPixels - (8 * 2).dp.roundToPx()).toDp()
+        (screenSize.height -
+                systemBarHeightInPixels -
+                BOTTOM_NAV_BAR_HEIGHT.roundToPx() - HOME_TOP_APP_BAR_HEIGHT.roundToPx() -
+                (16 * 2).dp.roundToPx()
+                ).toDp()
     }
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isLoading,
