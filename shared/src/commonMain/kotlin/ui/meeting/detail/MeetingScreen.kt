@@ -17,7 +17,9 @@ import com.russhwolf.settings.Settings
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import ui.component.MoimeWebView
+import ui.friend.FriendDetailScreen
 import ui.jsbridge.ACCESS_TOKEN_KEY
+import ui.jsbridge.FriendDetailNavigationHandler
 import ui.jsbridge.PopHandler
 import ui.main.home.HomeScreenModel
 import ui.meeting.camera.CameraScreen
@@ -39,6 +41,9 @@ data class MeetingScreen(private val meeting: Meeting) : Screen, KoinComponent {
             navigator.pop()
             homeScreenModel.refresh()
         }
+        val friendDetailNavigationHandler = FriendDetailNavigationHandler {
+            navigator.push(FriendDetailScreen(it))
+        }
 
         BackHandler(true) {
             navigator.pop()
@@ -58,7 +63,8 @@ data class MeetingScreen(private val meeting: Meeting) : Screen, KoinComponent {
             jsMessageHandlers = listOf(
                 meetingScreenModel.CameraJsMessageHandler(),
                 meetingScreenModel.imageDownloadHandler,
-                popHandler
+                popHandler,
+                friendDetailNavigationHandler
             )
         )
     }
