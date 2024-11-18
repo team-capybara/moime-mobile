@@ -24,6 +24,7 @@ data class MeetingResponseData(
     val finishedAt: String?,
     val location: LocationResponse,
     val status: String,
+    val owner: ParticipantResponse,
     val participants: List<ParticipantResponse>,
     val bestPhotoUrl: String?,
 ) {
@@ -34,7 +35,7 @@ data class MeetingResponseData(
         finishDateTime = finishedAt?.let { LocalDateTime.parse(it.toIsoDateTimeFormat()) },
         location = location.toUiModel(),
         status = Meeting.Status.from(status),
-        participants = participants.map { it.toUiModel() },
+        participants = (participants + listOf(owner)).map { it.toUiModel() },
         thumbnailUrl = bestPhotoUrl
     )
 }
