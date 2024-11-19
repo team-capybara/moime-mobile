@@ -25,7 +25,7 @@ class MyPageScreenModel(
 
     data class State(
         val onImagePicked: ((String) -> Unit)? = null,
-        val logoutRequired: Boolean = false
+        val logoutRequested: Boolean = false
     )
 
     val jsMessageHandler = MyPageJsMessageHandler(
@@ -59,7 +59,7 @@ class MyPageScreenModel(
             settings.remove(ACCESS_TOKEN_KEY)
             WebViewCookieManager().removeAllCookies()
             loginScreenModel.reset()
-            mutableState.value = state.value.copy(logoutRequired = true)
+            mutableState.value = state.value.copy(logoutRequested = true)
         }
     }
 

@@ -60,8 +60,8 @@ class MyPageScreen : Screen, KoinComponent {
             mainScreenModel.refresh()
         }
 
-        LaunchedEffect(state.logoutRequired) {
-            if (state.logoutRequired) {
+        LaunchedEffect(state.logoutRequested) {
+            if (state.logoutRequested) {
                 navigator.replaceAll(LoginScreen())
             }
         }
