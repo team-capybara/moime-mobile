@@ -13,6 +13,7 @@ import com.multiplatform.webview.jsbridge.rememberWebViewJsBridge
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewNavigator
 import com.multiplatform.webview.web.rememberWebViewState
+import ui.jsbridge.COOKIE_DOMAIN
 import ui.theme.Gray700
 
 @OptIn(InternalVoyagerApi::class)
@@ -35,7 +36,8 @@ fun MoimeWebView(
                     url = url,
                     cookie = Cookie(
                         name = "Authorization",
-                        value = "Bearer $token"
+                        value = "Bearer $token",
+                        domain = COOKIE_DOMAIN,
                     )
                 )
             } ?: run {
