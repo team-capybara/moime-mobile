@@ -20,7 +20,7 @@ object Api {
     const val MOIMS_CALENDAR = "$PATH_MOIMS/calendar"
     const val MOIMS_DATE = "$PATH_MOIMS/date"
     fun MOIMS_WITH(targetId: Long) = "$PATH_MOIMS/shared/$targetId"
-    fun MOIMS_WITH_COUNT(targetId: Long) = "$PATH_MOIMS/shared/$targetId/cnt"
+    fun MOIMS_WITH_COUNT(targetId: Long) = "$PATH_MOIMS/shared/$targetId/count"
 
     const val WEEKLY_SUMMARY = "$PATH_STAT/weekly/moim"
 
