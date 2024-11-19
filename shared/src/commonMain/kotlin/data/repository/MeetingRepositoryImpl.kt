@@ -202,14 +202,17 @@ class MeetingRepositoryImpl(
                     }
                 }
             }
-            if (response.status.value != 200) throw ApiException(response.status)
-            response.body<MeetingResponse>().run {
-                CursorData(
-                    data = data.map { it.toUiModel() },
-                    nextCursorId = cursorId?.cursorMoimId,
-                    nextCursorDate = null,
-                    isLast = last
-                )
+            if (response.status.value != 200) {
+                throw ApiException(response.status)
+            } else {
+                response.body<MeetingResponse>().run {
+                    CursorData(
+                        data = data.map { it.toUiModel() },
+                        nextCursorId = cursorId?.cursorMoimId,
+                        nextCursorDate = null,
+                        isLast = last
+                    )
+                }
             }
         }
 

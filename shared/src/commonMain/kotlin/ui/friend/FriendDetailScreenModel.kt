@@ -49,7 +49,7 @@ class FriendDetailScreenModel(
         refresh()
     }
 
-    fun refresh() {
+    private fun refresh() {
         mutableState.value = State(Friend.init(targetId))
         getStranger()
         getMeetingsTotalCount()
@@ -81,7 +81,7 @@ class FriendDetailScreenModel(
     }
 
     fun loadMeetings() {
-        if (state.value.meetings.canRequest().not()) return
+        if (state.value.meetings.canRequest().not() || mutableState.value.exception != null) return
         screenModelScope.launch {
             mutableState.value = state.value.copy(meetings = state.value.meetings.loading())
             meetingRepository.getMeetingsWith(targetId, state.value.meetings.nextRequest())
