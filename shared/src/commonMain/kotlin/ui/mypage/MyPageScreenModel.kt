@@ -2,6 +2,7 @@ package ui.mypage
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.multiplatform.webview.cookie.WebViewCookieManager
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
@@ -54,9 +55,12 @@ class MyPageScreenModel(
     }
 
     private fun onLogout() {
-        settings.remove(ACCESS_TOKEN_KEY)
-        loginScreenModel.reset()
-        mutableState.value = state.value.copy(logoutRequired = true)
+        screenModelScope.launch {
+            settings.remove(ACCESS_TOKEN_KEY)
+            WebViewCookieManager().removeAllCookies()
+            loginScreenModel.reset()
+            mutableState.value = state.value.copy(logoutRequired = true)
+        }
     }
 
     companion object {
