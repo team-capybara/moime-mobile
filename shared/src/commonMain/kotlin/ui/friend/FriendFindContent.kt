@@ -27,6 +27,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import moime.shared.generated.resources.Res
 import moime.shared.generated.resources.add_friend
+import moime.shared.generated.resources.blocked_friend
 import moime.shared.generated.resources.friendship_date_until
 import moime.shared.generated.resources.input_friend_code
 import moime.shared.generated.resources.it_is_me
@@ -121,11 +122,13 @@ private fun FriendFindCard(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MoimeProfileImage(
-                imageUrl = foundUser?.profileImageUrl ?: "",
-                size = 80.dp,
-                enableBorder = false
-            )
+            foundUser?.let {
+                MoimeProfileImage(
+                    imageUrl = it.profileImageUrl,
+                    size = 80.dp,
+                    enableBorder = false
+                )
+            }
             Spacer(Modifier.height(8.dp))
             Text(
                 text = foundUser?.nickname ?: "",
@@ -163,10 +166,14 @@ private fun FriendFindCard(
             } else {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = stringResource(
-                        Res.string.friendship_date_until,
-                        foundUser.friendshipDateTime.daysUntilNow()
-                    ),
+                    text = if (foundUser.blocked) {
+                        stringResource(Res.string.blocked_friend)
+                    } else {
+                        stringResource(
+                            Res.string.friendship_date_until,
+                            foundUser.friendshipDateTime.daysUntilNow()
+                        )
+                    },
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
                     color = Gray400
