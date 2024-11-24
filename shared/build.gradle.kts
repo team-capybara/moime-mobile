@@ -72,7 +72,6 @@ kotlin {
             implementation(libs.pullrefresh)
             implementation(libs.kim)
 
-            implementation(libs.peekaboo.ui)
             implementation(libs.peekaboo.image.picker)
 
             implementation(libs.filekit.core)
@@ -82,8 +81,13 @@ kotlin {
             implementation(libs.coil.ktor)
         }
         androidMain.dependencies {
+            implementation(libs.coroutines.guava)
             implementation(libs.ktor.client.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.accompanist.permissions)
+            implementation(libs.camera.camera2)
+            implementation(libs.camera.lifecycle)
+            implementation(libs.camera.view)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

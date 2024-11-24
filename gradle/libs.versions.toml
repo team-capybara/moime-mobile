@@ -9,13 +9,13 @@ agp = "8.5.2"
 kotlin = "2.0.10"
 coroutines = "1.8.1"
 
-kotlinx-datetime = "0.6.0"
+kotlinx-datetime = "0.6.1"
 kotlinx-serialization = "1.6.3"
 
 androidx-activityCompose = "1.9.2"
 androidx-lifecycleCompose = "2.8.5"
 
-compose = "1.7.0"
+compose = "1.7.1"
 compose-compiler = "1.5.13"
 compose-plugin = "1.7.0-beta01"
 compose-material3 = "1.3.0"
@@ -44,14 +44,16 @@ calendar = "1.0.1"
 peekaboo = "0.5.2"
 pullrefresh = "1.4.0-beta03"
 kim = "0.18.4"
-filekit = "0.8.7"
-okio = "3.9.1"
+filekit = "0.8.1"
+accompanist = "0.34.0"
+camerax = "1.3.2"
 
 desugar = "2.1.2"
 junit = "4.13.2"
 
 [libraries]
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "coroutines" }
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycleCompose" }
@@ -113,6 +115,10 @@ peekaboo-ui = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo
 peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", version.ref = "peekaboo" }
 pullrefresh = { module = "dev.materii.pullrefresh:pullrefresh", version.ref = "pullrefresh" }
 kim = { module = "com.ashampoo:kim", version.ref = "kim" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
+camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
+camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
 
 [bundles]
 voyager = [
