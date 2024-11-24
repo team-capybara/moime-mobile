@@ -3,7 +3,6 @@ package data.model
 import data.util.DateUtil.toIsoDateFormat
 import data.util.DateUtil.toIsoDateTimeFormat
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import ui.model.Location
 import ui.model.Meeting
@@ -31,8 +30,8 @@ data class MeetingResponseData(
     fun toUiModel() = Meeting(
         id = id,
         title = title,
-        startDateTime = LocalDateTime.parse(startedAt.toIsoDateTimeFormat()),
-        finishDateTime = finishedAt?.let { LocalDateTime.parse(it.toIsoDateTimeFormat()) },
+        startDateTimeString = startedAt.toIsoDateTimeFormat(),
+        finishDateTimeString = finishedAt?.toIsoDateTimeFormat(),
         location = location.toUiModel(),
         status = Meeting.Status.from(status),
         participants = (participants + listOf(owner)).map { it.toUiModel() },

@@ -12,8 +12,6 @@ import ui.jsbridge.ImageDownloadHandler
 import ui.jsbridge.WEBVIEW_BASE_URL
 import ui.model.Meeting
 import ui.util.DateUtil.now
-import ui.util.ResizeOptions
-import ui.util.resize
 
 class MeetingScreenModel(meeting: Meeting) :
     StateScreenModel<MeetingScreenModel.State>(State.Init) {
@@ -36,15 +34,9 @@ class MeetingScreenModel(meeting: Meeting) :
         onDownload = {
             screenModelScope.launch {
                 FileKit.saveFile(
-                    baseName = "moime-${LocalDateTime.now()}",
+                    baseName = "${meeting.title}${LocalDateTime.now()}",
                     extension = "jpg",
-                    bytes = it.resize(
-                        ResizeOptions(
-                            maxWidth = 1080,
-                            maxHeight = 1920,
-                            thresholdBytes = Long.MAX_VALUE
-                        )
-                    )
+                    bytes = it
                 )
             }
         }
