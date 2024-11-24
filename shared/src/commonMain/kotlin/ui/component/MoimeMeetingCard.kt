@@ -81,7 +81,7 @@ fun MoimeMeetingCard(
 ) {
     val density = LocalDensity.current
 
-    val isToday = meeting.startDateTime.isToday()
+    val isToday = meeting.startDateTime.isToday() && meeting.status != Meeting.Status.Completed
     var isMeetingStarted by remember { mutableStateOf(isToday && meeting.startDateTime.isNotYet()) }
 
     val todayTopPadding =
