@@ -46,8 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil3.CoilImage
+import coil3.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
 import moime.shared.generated.resources.Res
@@ -149,22 +148,18 @@ fun MoimeMeetingCard(
                             }
                         ) { targetState ->
                             if (targetState) {
-                                CoilImage(
-                                    imageModel = { it },
-                                    imageOptions = ImageOptions(
-                                        contentScale = ContentScale.Crop,
-                                        alignment = Alignment.Center
-                                    ),
+                                AsyncImage(
+                                    model = it,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             } else {
-                                CoilImage(
-                                    imageModel = { it },
-                                    imageOptions = ImageOptions(
-                                        contentScale = ContentScale.Crop,
-                                        colorFilter = ColorFilter.colorMatrix(GrayScaleColorMatrix),
-                                        alignment = Alignment.Center
-                                    ),
+                                AsyncImage(
+                                    model = it,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    colorFilter = ColorFilter.colorMatrix(GrayScaleColorMatrix),
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }

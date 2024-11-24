@@ -14,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ui.model.Friend
-import ui.theme.Gray400
 
 @Composable
 fun MoimeFriendBar(
@@ -29,8 +28,7 @@ fun MoimeFriendBar(
         MoimeProfileImage(
             imageUrl = friend.profileImageUrl,
             size = 40.dp,
-            enableBorder = false,
-            placeholderColor = Gray400
+            enableBorder = false
         )
         Spacer(Modifier.width(9.dp))
         Text(

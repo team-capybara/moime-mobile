@@ -150,7 +150,6 @@ private fun InsightSummaryCardFriendItem(
             MoimeProfileImage(
                 imageUrl = requireNotNull(friend?.profileImageUrl),
                 enableBorder = false,
-                placeholderColor = Gray800,
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer { rotationY = 180f }

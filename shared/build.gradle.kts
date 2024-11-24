@@ -68,7 +68,6 @@ kotlin {
             implementation(libs.bundles.voyager)
 
             implementation(libs.haze)
-            implementation(libs.landscapist)
             implementation(libs.calendar)
             implementation(libs.pullrefresh)
             implementation(libs.kim)
@@ -78,6 +77,9 @@ kotlin {
 
             implementation(libs.filekit.core)
             implementation(libs.filekit.compose)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.ktor)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)

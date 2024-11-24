@@ -12,6 +12,10 @@ import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import cafe.adriel.voyager.transitions.SlideTransition
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.request.CachePolicy
+import coil3.request.crossfade
 import dev.chrisbanes.haze.HazeState
 import ui.LocalHazeState
 import ui.LocalScreenSize
@@ -22,6 +26,14 @@ import ui.theme.MoimeTheme
 @OptIn(ExperimentalVoyagerApi::class)
 @Composable
 fun App() {
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .diskCachePolicy(CachePolicy.DISABLED)
+            .memoryCachePolicy(CachePolicy.DISABLED)
+            .crossfade(true)
+            .build()
+    }
+
     var screenSize by remember { mutableStateOf(ScreenSize()) }
     Layout(
         content = {
