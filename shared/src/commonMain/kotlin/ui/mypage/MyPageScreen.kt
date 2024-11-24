@@ -14,16 +14,12 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
-import com.russhwolf.settings.Settings
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import ui.component.MoimeImagePicker
 import ui.component.MoimeWebView
-import ui.jsbridge.ACCESS_TOKEN_KEY
 import ui.jsbridge.ImageStringData
 import ui.jsbridge.PopHandler
 import ui.jsbridge.WEBVIEW_BASE_URL
@@ -31,9 +27,8 @@ import ui.login.LoginScreen
 import ui.main.MainScreenModel
 import ui.util.Base64Util.encodeToBase64
 
-class MyPageScreen : Screen, KoinComponent {
+class MyPageScreen : Screen {
 
-    private val settings: Settings by inject()
     override val key: ScreenKey = uniqueScreenKey
 
     @OptIn(InternalVoyagerApi::class)
@@ -68,7 +63,6 @@ class MyPageScreen : Screen, KoinComponent {
 
         MoimeWebView(
             url = WEBVIEW_BASE_URL + MyPageScreenModel.WEBVIEW_URL_PATH_MY_PAGE,
-            accessToken = settings.getString(ACCESS_TOKEN_KEY, ""),
             jsMessageHandlers = myPageScreenModel.jsMessageHandler.getHandlers() + listOf(
                 myPageScreenModel.imagePickerHandler,
                 popHandler

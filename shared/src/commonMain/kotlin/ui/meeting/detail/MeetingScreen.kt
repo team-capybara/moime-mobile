@@ -13,21 +13,16 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
-import com.russhwolf.settings.Settings
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import ui.component.MoimeWebView
 import ui.friend.FriendDetailScreen
-import ui.jsbridge.ACCESS_TOKEN_KEY
 import ui.jsbridge.FriendDetailNavigationHandler
 import ui.jsbridge.PopHandler
 import ui.main.home.HomeScreenModel
 import ui.meeting.camera.CameraScreen
 import ui.model.Meeting
 
-data class MeetingScreen(private val meeting: Meeting) : Screen, KoinComponent {
+data class MeetingScreen(private val meeting: Meeting) : Screen {
 
-    private val settings: Settings by inject()
     override val key: ScreenKey = uniqueScreenKey
 
     @OptIn(InternalVoyagerApi::class)
@@ -59,7 +54,6 @@ data class MeetingScreen(private val meeting: Meeting) : Screen, KoinComponent {
 
         MoimeWebView(
             url = meetingScreenModel.webViewUrl,
-            accessToken = settings.getString(ACCESS_TOKEN_KEY, ""),
             jsMessageHandlers = listOf(
                 meetingScreenModel.CameraJsMessageHandler(),
                 meetingScreenModel.imageDownloadHandler,

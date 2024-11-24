@@ -2,13 +2,17 @@ package ui.login
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.multiplatform.webview.cookie.Cookie
+import com.multiplatform.webview.cookie.WebViewCookieManager
 import com.multiplatform.webview.jsbridge.IJsMessageHandler
 import com.multiplatform.webview.jsbridge.JsMessage
 import com.multiplatform.webview.jsbridge.dataToJsonString
 import com.multiplatform.webview.jsbridge.processParams
 import com.multiplatform.webview.web.WebViewNavigator
 import kotlinx.coroutines.launch
+import ui.jsbridge.COOKIE_DOMAIN
 import ui.jsbridge.ImagePickerHandler
+import ui.jsbridge.WEBVIEW_BASE_URL
 import ui.repository.UserRepository
 
 class LoginScreenModel(
@@ -39,6 +43,7 @@ class LoginScreenModel(
                 screenModelScope.launch {
                     userRepository.login(accessToken)
                         .onSuccess { fcmToken ->
+                            setWebViewCookieManager(accessToken)
                             mutableState.value = State.Success(isNewbie = loginJsMessage.isNewbie)
                             fcmToken?.let { callback(dataToJsonString(LoginJsCallback(it))) }
                         }
@@ -50,6 +55,17 @@ class LoginScreenModel(
         }
 
         override fun methodName(): String = BRIDGE_LOGIN_METHOD_NAME
+    }
+
+    private suspend fun setWebViewCookieManager(token: String) {
+        WebViewCookieManager().setCookie(
+            url = WEBVIEW_BASE_URL,
+            cookie = Cookie(
+                name = "Authorization",
+                value = "Bearer $token",
+                domain = COOKIE_DOMAIN
+            )
+        )
     }
 
     fun reset() {

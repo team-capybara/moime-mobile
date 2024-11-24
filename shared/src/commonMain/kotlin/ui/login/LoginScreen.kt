@@ -39,7 +39,6 @@ class LoginScreen : Screen {
 
         MoimeWebView(
             url = LoginScreenModel.WEBVIEW_LOGIN_URL,
-            accessToken = null,
             jsMessageHandlers = listOf(
                 screenModel.LoginJsMessageHandler(),
                 screenModel.imagePickerHandler

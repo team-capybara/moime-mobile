@@ -15,7 +15,7 @@ import ui.repository.NotificationRepository
 import ui.repository.UserRepository
 
 val repositoryModule = module {
-    single<UserRepository> { UserRepositoryImpl(get(), get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
     single<MeetingRepository> { MeetingRepositoryImpl(get()) }
     single<FriendRepository> { FriendRepositoryImpl(get()) }
     single<CameraRepository> { CameraRepositoryImpl(get()) }

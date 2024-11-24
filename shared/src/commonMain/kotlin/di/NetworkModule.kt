@@ -1,11 +1,9 @@
 package di
 
-import com.russhwolf.settings.Settings
 import data.Api
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -18,7 +16,6 @@ import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
-import ui.jsbridge.ACCESS_TOKEN_KEY
 
 internal val networkModule = module {
     single {
@@ -28,16 +25,13 @@ internal val networkModule = module {
                 //header("x-dummy-auth-id", "31")
             }
             install(Auth) {
+                val bearerTokenStorage: BearerTokenStorage = get()
                 bearer {
                     loadTokens {
-                        val settings: Settings = get()
-                        val accessToken = settings.getStringOrNull(ACCESS_TOKEN_KEY)
-                        accessToken?.let { BearerTokens(it, "") }
+                        bearerTokenStorage.last()
                     }
                     refreshTokens {
-                        val settings: Settings = get()
-                        val accessToken = settings.getStringOrNull(ACCESS_TOKEN_KEY)
-                        accessToken?.let { BearerTokens(it, "") }
+                        bearerTokenStorage.last()
                     }
                 }
             }

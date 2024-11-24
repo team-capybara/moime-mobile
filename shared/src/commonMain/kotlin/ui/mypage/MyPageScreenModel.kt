@@ -6,6 +6,7 @@ import com.multiplatform.webview.cookie.WebViewCookieManager
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
+import di.BearerTokenStorage
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -21,6 +22,7 @@ class MyPageScreenModel(
 ) : StateScreenModel<MyPageScreenModel.State>(State()), KoinComponent {
 
     private val settings: Settings by inject()
+    private val bearerTokenStorage: BearerTokenStorage by inject()
     private val loginScreenModel: LoginScreenModel by inject()
 
     data class State(
@@ -57,6 +59,7 @@ class MyPageScreenModel(
     private fun onLogout() {
         screenModelScope.launch {
             settings.remove(ACCESS_TOKEN_KEY)
+            bearerTokenStorage.clear()
             WebViewCookieManager().removeAllCookies()
             loginScreenModel.reset()
             mutableState.value = state.value.copy(logoutRequested = true)
