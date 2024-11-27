@@ -191,7 +191,7 @@ fun HomeListView(
                         }
                     )
                 }
-            } else {
+            } else if (state.isLoading.not()) {
                 item {
                     Column(
                         modifier = Modifier
