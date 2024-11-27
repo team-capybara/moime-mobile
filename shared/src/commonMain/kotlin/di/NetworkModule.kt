@@ -28,10 +28,10 @@ internal val networkModule = module {
                 val bearerTokenStorage: BearerTokenStorage = get()
                 bearer {
                     loadTokens {
-                        bearerTokenStorage.last()
+                        bearerTokenStorage.lastOrNull()
                     }
                     refreshTokens {
-                        bearerTokenStorage.last()
+                        bearerTokenStorage.lastOrNull()
                     }
                 }
             }
