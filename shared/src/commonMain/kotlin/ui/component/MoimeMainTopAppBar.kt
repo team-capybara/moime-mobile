@@ -97,7 +97,6 @@ fun MoimeMainTopAppBar(
                 MoimeProfileImage(
                     imageUrl = profileImageUrl,
                     size = 36.dp,
-                    enableBorder = false,
                     modifier = Modifier.clip(CircleShape).clickable { onClickProfile() }
                 )
                 Spacer(Modifier.weight(1f))

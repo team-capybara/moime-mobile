@@ -149,7 +149,6 @@ private fun InsightSummaryCardFriendItem(
         if (parentExpanded && animatedRotation.value >= 90f) {
             MoimeProfileImage(
                 imageUrl = requireNotNull(friend?.profileImageUrl),
-                enableBorder = false,
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer { rotationY = 180f }

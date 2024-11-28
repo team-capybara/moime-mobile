@@ -125,8 +125,7 @@ private fun FriendFindCard(
             foundUser?.let {
                 MoimeProfileImage(
                     imageUrl = it.profileImageUrl,
-                    size = 80.dp,
-                    enableBorder = false
+                    size = 80.dp
                 )
             }
             Spacer(Modifier.height(8.dp))

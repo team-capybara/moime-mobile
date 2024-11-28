@@ -19,7 +19,7 @@ import ui.theme.Gray500
 fun MoimeProfileImage(
     imageUrl: String,
     size: Dp? = null,
-    enableBorder: Boolean = true,
+    enableBorder: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(

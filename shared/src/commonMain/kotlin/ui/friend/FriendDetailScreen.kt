@@ -122,8 +122,7 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
                     Spacer(Modifier.height(24.dp))
                     MoimeProfileImage(
                         imageUrl = state.stranger.profileImageUrl,
-                        size = 80.dp,
-                        enableBorder = false
+                        size = 80.dp
                     )
                     Spacer(Modifier.height(16.dp))
                     Text(

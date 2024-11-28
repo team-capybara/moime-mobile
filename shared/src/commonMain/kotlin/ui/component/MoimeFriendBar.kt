@@ -27,8 +27,7 @@ fun MoimeFriendBar(
     ) {
         MoimeProfileImage(
             imageUrl = friend.profileImageUrl,
-            size = 40.dp,
-            enableBorder = false
+            size = 40.dp
         )
         Spacer(Modifier.width(9.dp))
         Text(
