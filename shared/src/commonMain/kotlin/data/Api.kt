@@ -8,6 +8,7 @@ object Api {
     private const val PATH_FRIENDS = "users/friends"
     private const val PATH_STAT = "stat"
     private const val PATH_NOTIFICATION = "users/notifications"
+    private const val PATH_SURVEY = "survey"
 
     const val USERS_MY = "$PATH_USERS/my"
     fun USERS_FIND_ID(id: Long) = "$PATH_USERS/id/$id"
@@ -34,4 +35,6 @@ object Api {
     const val FRIENDS_UNBLOCK = "$PATH_FRIENDS/unblock"
     const val FRIENDS_BLOCKED = "$PATH_FRIENDS/blocked"
     const val FRIENDS_BLOCKED_COUNT = "$PATH_FRIENDS/blocked/count"
+
+    const val SURVEY_FRIEND_STATS = "$PATH_SURVEY/friend-stats"
 }

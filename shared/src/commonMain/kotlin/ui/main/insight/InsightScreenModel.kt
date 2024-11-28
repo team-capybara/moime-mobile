@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.launch
 import ui.model.InsightSummary
+import ui.model.Survey
 import ui.repository.InsightRepository
 
 class InsightScreenModel(
@@ -13,7 +14,11 @@ class InsightScreenModel(
     sealed interface State {
         data object Init : State
         data object Loading : State
-        data class Success(val summary: InsightSummary) : State
+        data class Success(
+            val summary: InsightSummary,
+            val survey: Survey = Survey(100, false)
+        ) : State
+
         data class Failure(val throwable: Throwable) : State
     }
 
@@ -21,7 +26,7 @@ class InsightScreenModel(
         refresh()
     }
 
-    fun refresh() {
+    private fun refresh() {
         mutableState.value = State.Init
         getInsightSummary()
     }
@@ -29,9 +34,30 @@ class InsightScreenModel(
     private fun getInsightSummary() {
         screenModelScope.launch {
             mutableState.value = State.Loading
-            insightRepository.getInsightSummary()
-                .onSuccess { mutableState.value = State.Success(it) }
-                .onFailure { mutableState.value = State.Failure(it) }
+            val summary = insightRepository.getInsightSummary().getOrElse {
+                mutableState.value = State.Failure(it)
+                null
+            }
+            val survey = insightRepository.getSurvey().getOrElse {
+                mutableState.value = State.Failure(it)
+                null
+            }
+            if (summary != null && survey != null) {
+                mutableState.value = State.Success(summary, survey)
+            }
+        }
+    }
+
+    fun postSurvey() {
+        screenModelScope.launch {
+            when (val state = state.value) {
+                is State.Success -> {
+                    if (state.survey.submitted.not()) insightRepository.postSurvey()
+                    mutableState.value = state.copy(survey = state.survey.submit())
+                }
+
+                else -> return@launch
+            }
         }
     }
 

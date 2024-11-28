@@ -82,4 +82,7 @@
     <string name="date_period_format">%1$d월 %2$d일 - %3$d월 %4$d일</string>
 
     <string name="api_exception">통신 중 오류가 발생했습니다</string>
+
+    <string name="survey_title">아직 준비 중이에요</string>
+    <string name="survey_desc">친구 간 통계 기능 오픈을 위해\n모이미 버튼을 눌러 응원을 보내주세요!</string>
 </resources>

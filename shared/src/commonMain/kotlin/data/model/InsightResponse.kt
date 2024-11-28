@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import ui.model.Friend
 import ui.model.InsightSummary
+import ui.model.Survey
 import ui.util.DateUtil.secondsToPeriod
 
 @Serializable
@@ -52,4 +53,12 @@ data class InsightSummaryMeetingsCountResponse(
         DayOfWeek.SATURDAY to SATURDAY,
         DayOfWeek.SUNDAY to SUNDAY
     )
+}
+
+@Serializable
+data class SurveyResponse(
+    val count: Int,
+    val submitted: Boolean
+) {
+    fun toUiModel() = Survey(count, submitted)
 }

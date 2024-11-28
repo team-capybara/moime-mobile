@@ -34,7 +34,12 @@ class InsightScreen : Screen {
                         InsightSummaryContent(state.summary)
                     }
 
-                    InsightTabView.Friend -> {}
+                    InsightTabView.Friend -> {
+                        InsightFriendContent(
+                            survey = state.survey,
+                            onSubmit = insightScreenModel::postSurvey
+                        )
+                    }
                 }
             }
 
