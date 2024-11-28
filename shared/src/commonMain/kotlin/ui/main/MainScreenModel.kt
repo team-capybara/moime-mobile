@@ -47,7 +47,6 @@ class MainScreenModel(
             mutableState.value = State.Loading
             userRepository.getUser()
                 .onSuccess { mutableState.value = State.Success(it) }
-                .onFailure { mutableState.value = State.Failure(it) }
         }
     }
 
@@ -71,7 +70,6 @@ class MainScreenModel(
         screenModelScope.launch {
             notificationRepository.hasUnreadNotification()
                 .onSuccess { hasUnreadNotification = it }
-                .onFailure { mutableState.value = State.Failure(it) }
         }
     }
 
