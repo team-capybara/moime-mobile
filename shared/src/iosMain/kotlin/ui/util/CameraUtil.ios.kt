@@ -94,6 +94,7 @@ import platform.Foundation.NSNotification
 import platform.Foundation.NSNotificationCenter
 import platform.Foundation.NSSelectorFromString
 import platform.Foundation.dataWithBytes
+import platform.UIKit.UIColor
 import platform.UIKit.UIDevice
 import platform.UIKit.UIDeviceOrientation
 import platform.UIKit.UIGraphicsBeginImageContextWithOptions
@@ -496,10 +497,11 @@ private fun BoxScope.RealDeviceCamera(
     }
 
     UIKitView(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(color = Color.Black),
         factory = {
             val dispatchGroup = dispatch_group_create()
             val cameraContainer = UIView()
+            cameraContainer.backgroundColor = UIColor.blackColor
             cameraContainer.layer.addSublayer(cameraPreviewLayer)
             cameraPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
 
@@ -661,8 +663,10 @@ private fun RealDeviceCamera(
         factory = {
             val dispatchGroup = dispatch_group_create()
             val cameraContainer = UIView()
+            cameraContainer.backgroundColor = UIColor.blackColor
             cameraContainer.layer.addSublayer(cameraPreviewLayer)
             cameraPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+
             dispatch_group_enter(dispatchGroup)
             dispatch_async(queue) {
                 captureSession.startRunning()
