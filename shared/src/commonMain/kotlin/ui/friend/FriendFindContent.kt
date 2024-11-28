@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,7 @@ fun FriendFindContent(
     modifier: Modifier = Modifier,
 ) {
     val navigator = LocalNavigator.currentOrThrow
+    val clipboardManager = LocalClipboardManager.current
 
     Column(
         modifier = modifier.then(Modifier.fillMaxWidth())
@@ -73,7 +76,10 @@ fun FriendFindContent(
                 text = stringResource(Res.string.my_friend_code, myCode),
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
-                color = Gray400
+                color = Gray400,
+                modifier = Modifier.clickable {
+                    clipboardManager.setText(buildAnnotatedString { append(myCode) })
+                }
             )
         }
         Spacer(Modifier.height(18.dp))
