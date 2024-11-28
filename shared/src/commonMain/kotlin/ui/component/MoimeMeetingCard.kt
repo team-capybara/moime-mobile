@@ -232,22 +232,21 @@ fun MoimeMeetingCard(
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
-                        Surface(
-                            shape = RoundedCornerShape(6.dp),
-                            color = Gray700,
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = Gray700,
+                                    shape = RoundedCornerShape(6.dp)
+                                ),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(horizontal = 5.dp, vertical = 4.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = meeting.startDateTime.getDdayString(),
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 14.sp,
-                                    color = Gray50
-                                )
-                            }
+                            Text(
+                                text = meeting.startDateTime.getDdayString(),
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 14.sp,
+                                color = Gray50,
+                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 4.dp)
+                            )
                         }
                     }
                     Box(modifier = Modifier.align(Alignment.BottomCenter)) {
