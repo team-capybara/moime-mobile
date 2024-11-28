@@ -52,6 +52,7 @@ import kotlinx.datetime.LocalDateTime
 import moime.shared.generated.resources.Res
 import moime.shared.generated.resources.from_start
 import moime.shared.generated.resources.img_meeting_thumbnail
+import moime.shared.generated.resources.to_complete
 import moime.shared.generated.resources.to_start
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -259,6 +260,7 @@ fun MoimeMeetingCard(
                                 TimerButton(
                                     meetingDateTime = meeting.startDateTime,
                                     isMeetingStarted = isMeetingStarted,
+                                    meetingStatus = meeting.status,
                                     onMeetingStarted = { isMeetingStarted = true },
                                     modifier = Modifier
                                         .padding(vertical = 16.dp, horizontal = 8.dp)
@@ -276,6 +278,7 @@ fun MoimeMeetingCard(
 private fun TimerButton(
     meetingDateTime: LocalDateTime,
     isMeetingStarted: Boolean,
+    meetingStatus: Meeting.Status,
     onMeetingStarted: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -316,21 +319,25 @@ private fun TimerButton(
                 targetState = isMeetingStarted,
                 transitionSpec = { fadeIn(tween(1000)).togetherWith(fadeOut(tween(1000))) }
             ) {
-                if (it) {
-                    Text(
-                        text = stringResource(Res.string.from_start),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        color = animatedTextColor.value
-                    )
-                } else {
-                    Text(
-                        text = stringResource(Res.string.to_start),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        color = animatedTextColor.value
-                    )
+                val prefixStringRes = when {
+                    it && meetingStatus == Meeting.Status.Completed -> {
+                        Res.string.to_complete
+                    }
+
+                    it -> {
+                        Res.string.from_start
+                    }
+
+                    else -> {
+                        Res.string.to_start
+                    }
                 }
+                Text(
+                    text = stringResource(prefixStringRes),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    color = animatedTextColor.value
+                )
             }
             Spacer(Modifier.width(8.dp))
             Text(
