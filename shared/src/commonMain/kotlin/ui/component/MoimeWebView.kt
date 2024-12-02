@@ -12,6 +12,7 @@ import com.multiplatform.webview.jsbridge.rememberWebViewJsBridge
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewNavigator
 import com.multiplatform.webview.web.rememberWebViewState
+import ui.jsbridge.AccessTokenHandler
 import ui.theme.Gray700
 
 @OptIn(InternalVoyagerApi::class)
@@ -29,6 +30,7 @@ fun MoimeWebView(
     LaunchedEffect(jsBridge) {
         with(jsBridge) {
             jsMessageHandlers.forEach { register(it) }
+            register(AccessTokenHandler())
         }
     }
 
