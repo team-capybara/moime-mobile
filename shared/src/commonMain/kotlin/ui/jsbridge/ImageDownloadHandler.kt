@@ -18,11 +18,13 @@ class ImageDownloadHandler(
     ) {
         val imageJsMessage = processParams<ImageStringData>(message)
         onDownload(imageJsMessage.image.decodeFromBase64())
+        callback(CALLBACK)
     }
 
     override fun methodName(): String = methodName
 
     companion object {
         private const val DEFAULT_BRIDGE_METHOD_NAME = "onDownloadImage"
+        private const val CALLBACK = "SUCCESS"
     }
 }
