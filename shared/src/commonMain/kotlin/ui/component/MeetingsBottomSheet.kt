@@ -44,7 +44,7 @@ fun MeetingsBottomSheet(
                         onClickMeeting(it)
                         onDismissRequest()
                     },
-                    isAnotherTodayMeetingCardFocusing = false,
+                    isAnotherActiveMeetingCardFocusing = false,
                     forceDefaultHeightStyle = true,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )

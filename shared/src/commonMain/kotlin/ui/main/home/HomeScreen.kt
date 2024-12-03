@@ -28,8 +28,8 @@ class HomeScreen : Screen {
                         state = homeState.homeListState,
                         onRefresh = { homeScreenModel.refreshListState() },
                         onLoadCompletedMeetings = { homeScreenModel.loadCompleteMeetings() },
-                        isTodayMeetingVisible = mainScreenModel.topAppBarBackgroundVisible.not(),
-                        onTodayMeetingVisibleChanged = {
+                        isActiveMeetingVisible = mainScreenModel.topAppBarBackgroundVisible.not(),
+                        onActiveMeetingVisibleChanged = {
                             mainScreenModel.setTopAppBarBackgroundVisibility(it.not())
                         }
                     )

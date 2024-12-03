@@ -194,7 +194,7 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
                     MoimeMeetingCard(
                         meeting = it,
                         onClick = { navigator.push(MeetingScreen(it)) },
-                        isAnotherTodayMeetingCardFocusing = false,
+                        isAnotherActiveMeetingCardFocusing = false,
                         forceDefaultHeightStyle = true
                     )
                     Spacer(Modifier.height(8.dp))

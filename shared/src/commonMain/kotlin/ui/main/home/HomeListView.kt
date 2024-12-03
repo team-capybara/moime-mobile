@@ -62,15 +62,14 @@ import ui.meeting.detail.MeetingScreen
 import ui.theme.Gray400
 import ui.theme.Gray50
 import ui.theme.Gray500
-import ui.util.DateUtil.isToday
 
 @Composable
 fun HomeListView(
     state: HomeListState,
     onRefresh: () -> Unit,
     onLoadCompletedMeetings: () -> Unit,
-    isTodayMeetingVisible: Boolean,
-    onTodayMeetingVisibleChanged: (Boolean) -> Unit,
+    isActiveMeetingVisible: Boolean,
+    onActiveMeetingVisibleChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val navigator = LocalNavigator.currentOrThrow
@@ -112,7 +111,7 @@ fun HomeListView(
     LaunchedEffect(listState.firstVisibleItemIndex) {
         val index = listState.firstVisibleItemIndex
         if (state.meetings.size > index) {
-            onTodayMeetingVisibleChanged(state.meetings[index].startDateTime.isToday())
+            onActiveMeetingVisibleChanged(state.meetings[index].isActive)
         }
     }
 
@@ -129,7 +128,7 @@ fun HomeListView(
         }
     ) {
         AnimatedVisibility(
-            visible = isTodayMeetingVisible,
+            visible = isActiveMeetingVisible,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -185,9 +184,9 @@ fun HomeListView(
                     MoimeMeetingCard(
                         meeting = state.meetings[it],
                         onClick = { navigator.parent?.push(MeetingScreen(state.meetings[it])) },
-                        isAnotherTodayMeetingCardFocusing = run {
+                        isAnotherActiveMeetingCardFocusing = run {
                             val currentScrollIndex = listState.firstVisibleItemIndex
-                            state.meetings[currentScrollIndex].startDateTime.isToday() && it != currentScrollIndex
+                            state.meetings[currentScrollIndex].isActive && it != currentScrollIndex
                         }
                     )
                 }

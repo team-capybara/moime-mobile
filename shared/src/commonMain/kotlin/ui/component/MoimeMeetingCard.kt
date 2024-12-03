@@ -69,21 +69,20 @@ import ui.util.DateUtil.getDdayString
 import ui.util.DateUtil.getMonthDayString
 import ui.util.DateUtil.getPeriodString
 import ui.util.DateUtil.getTimeString
-import ui.util.DateUtil.isNotYet
-import ui.util.DateUtil.isToday
+import ui.util.DateUtil.isPast
 
+@Suppress("ktlint:standard:max-line-length")
 @Composable
 fun MoimeMeetingCard(
     meeting: Meeting,
     onClick: () -> Unit,
-    isAnotherTodayMeetingCardFocusing: Boolean,
+    isAnotherActiveMeetingCardFocusing: Boolean,
     forceDefaultHeightStyle: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
-
-    val isToday = meeting.startDateTime.isToday() && meeting.status != Meeting.Status.Completed
-    var isMeetingStarted by remember { mutableStateOf(isToday && meeting.startDateTime.isNotYet()) }
+    val isActive = meeting.isActive
+    var isMeetingStarted by remember { mutableStateOf(isActive && meeting.startDateTime.isPast()) }
 
     val todayTopPadding =
         with(density) {
@@ -97,7 +96,7 @@ fun MoimeMeetingCard(
         with(density) { LocalScreenSize.current.height.toDp() } - todayTopPadding - todayBottomPadding
 
     val animatedHeight = animateDpAsState(
-        if (isToday && !forceDefaultHeightStyle) todayHeight else MOIME_CARD_HEIGHT,
+        if (isActive && !forceDefaultHeightStyle) todayHeight else MOIME_CARD_HEIGHT,
         animationSpec = tween(durationMillis = 1000)
     )
     val animatedSubtextColor = animateColorAsState(
@@ -106,7 +105,7 @@ fun MoimeMeetingCard(
     )
 
     AnimatedContent(
-        targetState = isAnotherTodayMeetingCardFocusing,
+        targetState = isAnotherActiveMeetingCardFocusing,
         transitionSpec = { fadeIn(tween(delayMillis = 100)).togetherWith(fadeOut()) }
     ) {
         if (it) {
@@ -166,7 +165,7 @@ fun MoimeMeetingCard(
                             }
                         }
                     } ?: run {
-                        if (isToday && !forceDefaultHeightStyle) {
+                        if (isActive && !forceDefaultHeightStyle) {
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -251,7 +250,7 @@ fun MoimeMeetingCard(
                     }
                     Box(modifier = Modifier.align(Alignment.BottomCenter)) {
                         androidx.compose.animation.AnimatedVisibility(
-                            visible = isToday,
+                            visible = isActive,
                             enter = fadeIn(tween(durationMillis = 1000, delayMillis = 1000)),
                             exit = fadeOut(tween(durationMillis = 1000, delayMillis = 1000))
                         ) {
@@ -292,7 +291,7 @@ private fun TimerButton(
     )
     LaunchedEffect(Unit) {
         while (true) {
-            if (!isMeetingStarted && meetingDateTime.isNotYet()) {
+            if (!isMeetingStarted && meetingDateTime.isPast()) {
                 onMeetingStarted()
             }
             timeString = meetingDateTime.getPeriodString()
@@ -316,10 +315,12 @@ private fun TimerButton(
         ) {
             AnimatedContent(
                 targetState = isMeetingStarted,
-                transitionSpec = { fadeIn(tween(1000)).togetherWith(fadeOut(tween(1000))) }
+                transitionSpec = {
+                    fadeIn(tween(1000)).togetherWith(fadeOut(tween(1000)))
+                }
             ) {
                 val prefixStringRes = when {
-                    it && meetingStatus == Meeting.Status.Completed -> {
+                    it && meetingStatus == Meeting.Status.Finished -> {
                         Res.string.to_complete
                     }
 

@@ -2,6 +2,7 @@ package ui.model
 
 import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.datetime.LocalDateTime
+import ui.util.DateUtil.isToday
 
 data class Meeting(
     val id: Long,
@@ -20,11 +21,13 @@ data class Meeting(
     val finishDateTime: LocalDateTime?
         get() = finishDateTimeString?.let { LocalDateTime.parse(it) }
 
+    val isActive = startDateTime.isToday() && status != Status.Completed
+
     enum class Status(val value: String) {
         Created("CREATED"),
         Ongoing("ONGOING"),
-        Completed("COMPLETED"),
         Finished("FINISHED"),
+        Completed("COMPLETED"),
         Failed("FAILED"),
         Unknown("UNKNOWN")
         ;

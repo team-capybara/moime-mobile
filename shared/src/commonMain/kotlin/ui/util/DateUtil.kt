@@ -29,7 +29,7 @@ object DateUtil {
         }
     }
 
-    fun LocalDateTime.isNotYet(): Boolean {
+    fun LocalDateTime.isPast(): Boolean {
         val now = LocalDateTime.now()
         return compareTo(now) < 0
     }
