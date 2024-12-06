@@ -1,18 +1,16 @@
 package ui.util
 
-import androidx.compose.ui.graphics.ImageBitmap
-import com.preat.peekaboo.image.picker.toImageBitmap
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.allocArrayOf
+import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.useContents
-import platform.CoreGraphics.CGBitmapContextCreate
-import platform.CoreGraphics.CGBitmapContextCreateImage
-import platform.CoreGraphics.CGColorSpaceCreateDeviceRGB
-import platform.CoreGraphics.CGImageAlphaInfo
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSize
 import platform.CoreGraphics.CGSizeMake
+import platform.Foundation.NSData
+import platform.Foundation.create
 import platform.UIKit.UIGraphicsBeginImageContextWithOptions
 import platform.UIKit.UIGraphicsEndImageContext
 import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
@@ -20,39 +18,21 @@ import platform.UIKit.UIImage
 import platform.UIKit.UIImageJPEGRepresentation
 import platform.posix.memcpy
 
-actual fun ByteArray.resize(
-    resizeOptions: ResizeOptions
-): ByteArray {
-    return with(resizeOptions) {
-        toImageBitmap()
-            .toUIImage()
-            ?.fitInto(maxWidth, maxHeight, thresholdBytes)
-            ?.toByteArray()
-            ?: error("Failed to resize ImageBitmap of UIImage")
-    }
+actual fun ByteArray.resize(resizeOptions: ResizeOptions): ByteArray {
+    return UIImage
+        .imageWithData(toNSData())
+        ?.fitInto(
+            maxWidth = resizeOptions.maxWidth,
+            maxHeight = resizeOptions.maxHeight,
+            resizeThresholdBytes = resizeOptions.thresholdBytes
+        )
+        ?.toByteArray()
+        ?: error ("Failed to resize image")
 }
 
 @OptIn(ExperimentalForeignApi::class)
-fun ImageBitmap.toUIImage(): UIImage? {
-    val width = this.width
-    val height = this.height
-    val buffer = IntArray(width * height)
-
-    this.readPixels(buffer)
-
-    val colorSpace = CGColorSpaceCreateDeviceRGB()
-    val context = CGBitmapContextCreate(
-        data = buffer.refTo(0),
-        width = width.toULong(),
-        height = height.toULong(),
-        bitsPerComponent = 8u,
-        bytesPerRow = (4 * width).toULong(),
-        space = colorSpace,
-        bitmapInfo = CGImageAlphaInfo.kCGImageAlphaPremultipliedLast.value
-    )
-
-    val cgImage = CGBitmapContextCreateImage(context)
-    return cgImage?.let { UIImage.imageWithCGImage(it) }
+private fun ByteArray.toNSData(): NSData = memScoped {
+    return NSData.create(bytes = allocArrayOf(this@toNSData), length = this@toNSData.size.toULong())
 }
 
 @OptIn(ExperimentalForeignApi::class)
