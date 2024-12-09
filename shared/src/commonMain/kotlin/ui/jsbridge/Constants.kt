@@ -6,4 +6,4 @@ const val COOKIE_DOMAIN = "moime.app"
 
 const val ACCESS_TOKEN_KEY = "accessToken"
 
-const val APP_VERSION = "1.0.0-beta.11"
+const val APP_VERSION = "1.0.0-beta.12"
