@@ -2,19 +2,21 @@ package ui.util
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.periodUntil
+import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.math.abs
 
 object DateUtil {
 
-    val timeZone = TimeZone.currentSystemDefault()
+    private val timeZone = TimeZone.currentSystemDefault()
 
     fun DayOfWeek.toKr(): String {
         return when (this.isoDayNumber) {
@@ -27,6 +29,10 @@ object DateUtil {
             7 -> "일"
             else -> throw IllegalArgumentException()
         }
+    }
+
+    fun LocalDateTime.toCompleteTime(): LocalDateTime {
+        return toInstant(timeZone).plus(10, DateTimeUnit.MINUTE).toLocalDateTime(timeZone)
     }
 
     fun LocalDateTime.isPast(): Boolean {

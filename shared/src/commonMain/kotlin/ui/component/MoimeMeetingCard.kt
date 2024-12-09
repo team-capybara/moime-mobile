@@ -70,6 +70,8 @@ import ui.util.DateUtil.getMonthDayString
 import ui.util.DateUtil.getPeriodString
 import ui.util.DateUtil.getTimeString
 import ui.util.DateUtil.isPast
+import ui.util.DateUtil.now
+import ui.util.DateUtil.toCompleteTime
 
 @Suppress("ktlint:standard:max-line-length")
 @Composable
@@ -256,9 +258,8 @@ fun MoimeMeetingCard(
                         ) {
                             if (!forceDefaultHeightStyle) {
                                 TimerButton(
-                                    meetingDateTime = meeting.startDateTime,
+                                    meeting = meeting,
                                     isMeetingStarted = isMeetingStarted,
-                                    meetingStatus = meeting.status,
                                     onMeetingStarted = { isMeetingStarted = true },
                                     modifier = Modifier
                                         .padding(vertical = 16.dp, horizontal = 8.dp)
@@ -274,12 +275,17 @@ fun MoimeMeetingCard(
 
 @Composable
 private fun TimerButton(
-    meetingDateTime: LocalDateTime,
+    meeting: Meeting,
     isMeetingStarted: Boolean,
-    meetingStatus: Meeting.Status,
     onMeetingStarted: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val meetingStatus = meeting.status
+    val meetingDateTime = if (meetingStatus == Meeting.Status.Finished) {
+        (meeting.finishDateTime ?: LocalDateTime.now()).toCompleteTime()
+    } else {
+        meeting.startDateTime
+    }
     var timeString: String by remember { mutableStateOf("00:00:00") }
     val animatedButtonColor = animateColorAsState(
         if (!isMeetingStarted) Gray50 else MoimeGreen,
