@@ -121,7 +121,12 @@ data class FriendScreen(
                         profileImageUrl = user?.profileImageUrl ?: "",
                         onShare = {
                             coroutineScope.launch {
-                                ShareUtil.shareText(getString(Res.string.app_share_content_text))
+                                ShareUtil.shareText(
+                                    getString(
+                                        Res.string.app_share_content_text,
+                                        user?.code ?: ""
+                                    )
+                                )
                             }
                         }
                     )

@@ -62,7 +62,7 @@
     <string name="unblock_friend_dialog">%1$s님을 차단 해제해요</string>
     <string name="unblock_friend_dialog_desc">이제 %1$s님이 당신을\n친구로 추가할 수 있어요</string>
 
-    <string name="app_share_content_text">오프라인 활동 아카이빙, 모이미\n우리 모임을 함께 기록해요.\n[모이미 링크 주소]</string>
+    <string name="app_share_content_text">오프라인 활동 아카이빙, 모이미\n스토어에서 "모이미"를 검색하고 코드를 통해 친구를 추가해서 모임을 함께 기록해보아요!\n친구코드: %1$s</string>
 
     <string name="insight_tab_summary">요약</string>
     <string name="insight_tab_friend">친구</string>
