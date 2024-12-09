@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.multiplatform.webview.jsbridge.IJsMessageHandler
 import com.multiplatform.webview.jsbridge.JsMessage
 import com.multiplatform.webview.web.WebViewNavigator
+import data.util.DateUtil.toApiFormat
 import io.github.vinceglb.filekit.core.FileKit
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
@@ -34,7 +35,7 @@ class MeetingScreenModel(meeting: Meeting) :
         onDownload = {
             screenModelScope.launch {
                 FileKit.saveFile(
-                    baseName = "${meeting.title}${LocalDateTime.now()}",
+                    baseName = "${meeting.title}-${LocalDateTime.now().toApiFormat()}",
                     extension = "jpg",
                     bytes = it
                 )
