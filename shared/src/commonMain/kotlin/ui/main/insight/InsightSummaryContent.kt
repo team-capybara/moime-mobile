@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +37,9 @@ fun InsightSummaryContent(
     val density = LocalDensity.current
     val hazeState = LocalHazeState.current
     val listState = rememberLazyListState()
+    val expandState = remember {
+        mutableStateMapOf(*InsightSummaryType.entries.map { it to false }.toTypedArray())
+    }
 
     LazyColumn(
         modifier = modifier.then(Modifier.fillMaxSize().haze(state = hazeState)),
@@ -54,8 +59,11 @@ fun InsightSummaryContent(
             InsightSummaryCard(
                 type = InsightSummaryType.entries[index],
                 summary = summary,
+                expanded = expandState[InsightSummaryType.entries[index]] ?: false,
                 onExpand = { expanded ->
                     if (expanded) {
+                        expandState.clear()
+                        expandState[InsightSummaryType.entries[index]] = true
                         val scrollOffset = with(density) {
                             ((INSIGHT_SUMMARY_CARD_HEIGHT + 8.dp) * index).toPx()
                         }
@@ -66,8 +74,9 @@ fun InsightSummaryContent(
                                 animateScrollBy(scrollOffset)
                             }
                         }
+                    } else {
+                        expandState[InsightSummaryType.entries[index]] = false
                     }
-
                 }
             )
         }

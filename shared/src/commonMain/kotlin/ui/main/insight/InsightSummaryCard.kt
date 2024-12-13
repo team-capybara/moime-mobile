@@ -20,10 +20,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -48,11 +44,10 @@ import ui.theme.MoimeGreen
 fun InsightSummaryCard(
     summary: InsightSummary,
     type: InsightSummaryType,
-    modifier: Modifier = Modifier,
-    onExpand: (Boolean) -> Unit
+    expanded: Boolean,
+    onExpand: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var expanded by remember { mutableStateOf(false) }
-
     val density = LocalDensity.current
     val expandedTopPadding = with(density) {
         WindowInsets.statusBars.getTop(this).toDp()
@@ -76,10 +71,7 @@ fun InsightSummaryCard(
 
     Card(
         modifier = modifier.then(Modifier.fillMaxWidth()),
-        onClick = {
-            expanded = expanded.not()
-            onExpand(expanded)
-        },
+        onClick = { onExpand(expanded.not()) },
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = animatedContainerColor.value)
     ) {
