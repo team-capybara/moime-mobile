@@ -43,6 +43,7 @@ fun MoimeWebView(
             WebView(
                 state = webViewState.apply {
                     webSettings.backgroundColor = Gray700
+                    webSettings.androidWebSettings.domStorageEnabled = true
                 },
                 navigator = webViewNavigator,
                 webViewJsBridge = jsBridge,
