@@ -19,6 +19,8 @@ import ui.jsbridge.ImageStringData
 import ui.main.MainScreen
 import ui.onboarding.OnboardingScreen
 import ui.util.Base64Util.encodeToBase64
+import ui.util.ResizeOptions
+import ui.util.resize
 
 class LoginScreen : Screen {
 
@@ -48,7 +50,8 @@ class LoginScreen : Screen {
         (loginState as? LoginScreenModel.State.InProgress)?.onImagePicked?.let { callback ->
             MoimeImagePicker(onPicked = { images ->
                 images.firstOrNull()?.let {
-                    callback(Json.encodeToString(ImageStringData(it.encodeToBase64())))
+                    val imageString = it.resize(ResizeOptions(256, 256)).encodeToBase64()
+                    callback(Json.encodeToString(ImageStringData(imageString)))
                 }
             })
         }
