@@ -30,9 +30,6 @@ internal val networkModule = module {
                     loadTokens {
                         bearerTokenStorage.lastOrNull()
                     }
-                    refreshTokens {
-                        bearerTokenStorage.lastOrNull()
-                    }
                 }
             }
             install(HttpTimeout) {

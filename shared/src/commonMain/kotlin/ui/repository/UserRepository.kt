@@ -9,4 +9,6 @@ interface UserRepository {
      * @return FCM Token
      */
     suspend fun login(accessToken: String): Result<String?>
+
+    suspend fun logout(): Result<Unit>
 }

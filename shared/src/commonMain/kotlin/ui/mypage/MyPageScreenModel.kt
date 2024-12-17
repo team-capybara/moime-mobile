@@ -3,27 +3,24 @@ package ui.mypage
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.multiplatform.webview.cookie.WebViewCookieManager
-import com.russhwolf.settings.Settings
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
-import di.BearerTokenStorage
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ui.jsbridge.ACCESS_TOKEN_KEY
 import ui.jsbridge.APP_VERSION
 import ui.jsbridge.ImagePickerHandler
 import ui.login.LoginScreenModel
+import ui.repository.UserRepository
 
 class MyPageScreenModel(
     private val permissionsController: PermissionsController
 ) : StateScreenModel<MyPageScreenModel.State>(State()), KoinComponent {
 
-    private val settings: Settings by inject()
-    private val bearerTokenStorage: BearerTokenStorage by inject()
     private val loginScreenModel: LoginScreenModel by inject()
+    private val userRepository: UserRepository by inject()
 
     data class State(
         val onImagePicked: ((String) -> Unit)? = null,
@@ -58,8 +55,7 @@ class MyPageScreenModel(
 
     private fun onLogout() {
         screenModelScope.launch {
-            settings.remove(ACCESS_TOKEN_KEY)
-            bearerTokenStorage.clear()
+            userRepository.logout()
             WebViewCookieManager().removeAllCookies()
             loginScreenModel.reset()
             mutableState.value = state.value.copy(logoutRequested = true)

@@ -8,6 +8,8 @@ import data.model.toUser
 import di.BearerTokenStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.authProviders
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.request.get
 import org.koin.core.component.KoinComponent
@@ -27,7 +29,17 @@ class UserRepositoryImpl(
 
     override suspend fun login(accessToken: String): Result<String?> = runCatching {
         settings.putString(ACCESS_TOKEN_KEY, accessToken)
-        bearerTokenStorage.add(BearerTokens(accessToken, accessToken))
+        bearerTokenStorage.add(BearerTokens(accessToken, null))
         NotifierManager.getPushNotifier().getToken()
+    }
+
+    override suspend fun logout(): Result<Unit> = runCatching {
+        settings.remove(ACCESS_TOKEN_KEY)
+        bearerTokenStorage.clear()
+        httpClient.authProviders.forEach {
+            if (it is BearerAuthProvider) {
+                it.clearToken()
+            }
+        }
     }
 }
