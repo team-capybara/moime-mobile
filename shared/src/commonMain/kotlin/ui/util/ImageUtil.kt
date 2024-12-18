@@ -1,11 +1,15 @@
 package ui.util
 
+import androidx.compose.ui.graphics.ImageBitmap
+
 /**
  * Compress with JPEG format and sampling the image with given options.
  */
 expect fun ByteArray.resize(
     resizeOptions: ResizeOptions
 ): ByteArray
+
+expect fun ByteArray.toImageBitmap(): ImageBitmap
 
 data class ResizeOptions(
     val maxWidth: Int = 512,

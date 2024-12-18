@@ -38,10 +38,8 @@ kmpnotifier = "0.6.0"
 stately = "2.0.7"
 
 coil = "3.0.3"
-landscapist = "2.4.1"
 haze = "0.7.2"
 calendar = "1.0.1"
-peekaboo = "0.5.2"
 pullrefresh = "1.4.0-beta03"
 kim = "0.18.4"
 filekit = "0.8.1"
@@ -108,11 +106,8 @@ kmpnotifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "kmpn
 stately-common = { module = "co.touchlab:stately-common", version.ref = "stately" }
 
 webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "webview" }
-landscapist = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landscapist" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 calendar = { module = "io.github.wojciechosak:calendar", version.ref = "calendar" }
-peekaboo-ui = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo" }
-peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", version.ref = "peekaboo" }
 pullrefresh = { module = "dev.materii.pullrefresh:pullrefresh", version.ref = "pullrefresh" }
 kim = { module = "com.ashampoo:kim", version.ref = "kim" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }

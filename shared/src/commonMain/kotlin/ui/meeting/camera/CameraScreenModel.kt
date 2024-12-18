@@ -6,7 +6,6 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.ashampoo.kim.Kim
 import com.ashampoo.kim.model.GpsCoordinates
 import com.ashampoo.kim.model.MetadataUpdate
-import com.preat.peekaboo.image.picker.toImageBitmap
 import dev.icerock.moko.geo.LatLng
 import dev.icerock.moko.geo.LocationTracker
 import kotlinx.coroutines.delay
@@ -19,6 +18,7 @@ import org.koin.core.component.inject
 import ui.repository.CameraRepository
 import ui.util.ResizeOptions
 import ui.util.resize
+import ui.util.toImageBitmap
 
 class CameraScreenModel(
     private val meetingId: Long,

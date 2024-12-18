@@ -19,8 +19,6 @@ import ui.jsbridge.ImageStringData
 import ui.main.MainScreen
 import ui.onboarding.OnboardingScreen
 import ui.util.Base64Util.encodeToBase64
-import ui.util.ResizeOptions
-import ui.util.resize
 
 class LoginScreen : Screen {
 
@@ -35,7 +33,7 @@ class LoginScreen : Screen {
         LaunchedEffect(loginState) {
             val state = loginState
             if (state is LoginScreenModel.State.Success) {
-                navigator.replace(if (state.isNewbie) OnboardingScreen() else MainScreen())
+                navigator.push(if (state.isNewbie) OnboardingScreen() else MainScreen())
             }
         }
 
@@ -48,11 +46,8 @@ class LoginScreen : Screen {
         )
 
         (loginState as? LoginScreenModel.State.InProgress)?.onImagePicked?.let { callback ->
-            MoimeImagePicker(onPicked = { images ->
-                images.firstOrNull()?.let {
-                    val imageString = it.resize(ResizeOptions(256, 256)).encodeToBase64()
-                    callback(Json.encodeToString(ImageStringData(imageString)))
-                }
+            MoimeImagePicker(onPicked = {
+                callback(Json.encodeToString(ImageStringData(it.encodeToBase64())))
             })
         }
 

@@ -26,7 +26,7 @@ class InsightScreenModel(
         refresh()
     }
 
-    private fun refresh() {
+    fun refresh() {
         mutableState.value = State.Init
         getInsightSummary()
     }

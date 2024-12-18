@@ -1,11 +1,14 @@
 package ui.util
 
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.allocArrayOf
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.useContents
+import org.jetbrains.skia.Image
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSize
 import platform.CoreGraphics.CGSizeMake
@@ -86,4 +89,8 @@ private fun UIImage.resize(targetSize: CValue<CGSize>): UIImage {
     UIGraphicsEndImageContext()
 
     return newImage!!
+}
+
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
+    return Image.makeFromEncoded(this).toComposeImageBitmap()
 }

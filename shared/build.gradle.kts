@@ -72,8 +72,6 @@ kotlin {
             implementation(libs.pullrefresh)
             implementation(libs.kim)
 
-            implementation(libs.peekaboo.image.picker)
-
             implementation(libs.filekit.core)
             implementation(libs.filekit.compose)
 

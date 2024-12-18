@@ -2,6 +2,8 @@ package ui.util
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import java.io.ByteArrayOutputStream
 
 actual fun ByteArray.resize(
@@ -31,4 +33,8 @@ actual fun ByteArray.resize(
         )
         return byteArrayOutputStream.toByteArray()
     }
+}
+
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
+    return BitmapFactory.decodeByteArray(this, 0, size).asImageBitmap()
 }

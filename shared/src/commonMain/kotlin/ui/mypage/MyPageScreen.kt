@@ -20,13 +20,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ui.component.MoimeImagePicker
 import ui.component.MoimeWebView
+import ui.jsbridge.ImageStringData
 import ui.jsbridge.PopHandler
 import ui.jsbridge.WEBVIEW_BASE_URL
 import ui.login.LoginScreen
 import ui.main.MainScreenModel
 import ui.util.Base64Util.encodeToBase64
-import ui.util.ResizeOptions
-import ui.util.resize
 
 class MyPageScreen : Screen {
 
@@ -71,11 +70,8 @@ class MyPageScreen : Screen {
         )
 
         state.onImagePicked?.let { callback ->
-            MoimeImagePicker(onPicked = { images ->
-                images.firstOrNull()?.let {
-                    val imageString = it.resize(ResizeOptions(256, 256)).encodeToBase64()
-                    callback(Json.encodeToString(imageString))
-                }
+            MoimeImagePicker(onPicked = {
+                callback(Json.encodeToString(ImageStringData(it.encodeToBase64())))
             })
         }
     }
