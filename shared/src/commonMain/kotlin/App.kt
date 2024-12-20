@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
@@ -19,7 +20,11 @@ import coil3.request.crossfade
 import dev.chrisbanes.haze.HazeState
 import ui.LocalHazeState
 import ui.LocalScreenSize
+import ui.LocalToastHandler
 import ui.ScreenSize
+import ui.ToastHandler
+import ui.ToastState
+import ui.component.MoimeToast
 import ui.splash.SplashScreen
 import ui.theme.MoimeTheme
 
@@ -35,13 +40,19 @@ fun App() {
     }
 
     var screenSize by remember { mutableStateOf(ScreenSize()) }
+    var toastState by remember { mutableStateOf<ToastState?>(null) }
+
     Layout(
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
                 MoimeTheme {
                     CompositionLocalProvider(
                         LocalScreenSize provides screenSize,
-                        LocalHazeState provides HazeState()
+                        LocalHazeState provides HazeState(),
+                        LocalToastHandler provides ToastHandler(
+                            isShowing = toastState != null,
+                            onShow = { toastState = it }
+                        )
                     ) {
                         Navigator(
                             screen = SplashScreen(),
@@ -53,6 +64,13 @@ fun App() {
                             )
                         }
                     }
+                }
+                toastState?.let {
+                    MoimeToast(
+                        state = it,
+                        onDismissRequest = { toastState = null },
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    )
                 }
             }
         },
