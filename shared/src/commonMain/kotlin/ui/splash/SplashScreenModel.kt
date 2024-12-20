@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.multiplatform.webview.cookie.Cookie
 import com.multiplatform.webview.cookie.WebViewCookieManager
 import di.BearerTokenStorage
+import di.ScopeProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ui.jsbridge.COOKIE_DOMAIN
@@ -24,6 +25,7 @@ class SplashScreenModel(
         screenModelScope.launch {
             delay(SPLASH_DELAY_MILLIS)
             bearerTokenStorage.lastOrNull()?.let {
+                ScopeProvider.createScope()
                 setWebViewCookieManager(it.accessToken)
                 mutableState.value = State.Authorized
             } ?: run {

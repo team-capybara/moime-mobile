@@ -194,7 +194,7 @@ class FriendDetailScreenModel(
         }
     }
 
-    fun onUnblock() {
+    private fun onUnblock() {
         screenModelScope.launch {
             friendRepository.unblockFriend(targetId)
                 .onSuccess {

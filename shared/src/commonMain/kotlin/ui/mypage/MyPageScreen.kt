@@ -10,12 +10,12 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import di.ScopeProvider.getScreenModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ui.component.MoimeImagePicker
@@ -42,7 +42,7 @@ class MyPageScreen : Screen {
         }
         BindEffect(permissionController)
 
-        val mainScreenModel = koinScreenModel<MainScreenModel>()
+        val mainScreenModel = getScreenModel<MainScreenModel>()
         val myPageScreenModel = rememberScreenModel { MyPageScreenModel(permissionController) }
         val state by myPageScreenModel.state.collectAsState()
         val popHandler = PopHandler {

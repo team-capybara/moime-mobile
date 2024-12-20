@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import cafe.adriel.voyager.koin.koinScreenModel
+import di.ScopeProvider.getScreenModel
 import ui.component.ExceptionDialog
 import ui.component.MoimeLoading
 import ui.main.MainScreenModel
@@ -17,8 +17,8 @@ class InsightScreen : Screen {
 
     @Composable
     override fun Content() {
-        val mainScreenModel = koinScreenModel<MainScreenModel>()
-        val insightScreenModel = koinScreenModel<InsightScreenModel>()
+        val mainScreenModel = getScreenModel<MainScreenModel>()
+        val insightScreenModel = getScreenModel<InsightScreenModel>()
         val insightState by insightScreenModel.state.collectAsState()
 
         when (val state = insightState) {

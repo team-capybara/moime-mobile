@@ -12,12 +12,12 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import di.ScopeProvider.getScreenModel
 import ui.component.ExceptionDialog
 import ui.component.MeetingsBottomSheet
 import ui.component.MoimeBottomNavigationBar
@@ -39,7 +39,7 @@ class MainScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val mainScreenModel = koinScreenModel<MainScreenModel>()
+        val mainScreenModel = getScreenModel<MainScreenModel>()
         val mainState by mainScreenModel.state.collectAsState()
         var user by remember { mutableStateOf<User?>(null) }
         val selectedDateMeetings = mainScreenModel.selectedDateMeetings

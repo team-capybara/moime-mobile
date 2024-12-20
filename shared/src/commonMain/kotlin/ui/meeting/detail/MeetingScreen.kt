@@ -9,10 +9,10 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
+import di.ScopeProvider.getScreenModel
 import ui.component.MoimeWebView
 import ui.friend.FriendDetailScreen
 import ui.jsbridge.FriendDetailNavigationHandler
@@ -29,7 +29,7 @@ data class MeetingScreen(private val meeting: Meeting) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val homeScreenModel = koinScreenModel<HomeScreenModel>()
+        val homeScreenModel = getScreenModel<HomeScreenModel>()
         val meetingScreenModel = rememberScreenModel { MeetingScreenModel(meeting) }
         val state by meetingScreenModel.state.collectAsState()
         val popHandler = PopHandler {

@@ -9,6 +9,7 @@ import com.multiplatform.webview.jsbridge.JsMessage
 import com.multiplatform.webview.jsbridge.dataToJsonString
 import com.multiplatform.webview.jsbridge.processParams
 import com.multiplatform.webview.web.WebViewNavigator
+import di.ScopeProvider
 import kotlinx.coroutines.launch
 import ui.jsbridge.COOKIE_DOMAIN
 import ui.jsbridge.ImagePickerHandler
@@ -43,6 +44,8 @@ class LoginScreenModel(
                 screenModelScope.launch {
                     userRepository.login(accessToken)
                         .onSuccess { fcmToken ->
+                            ScopeProvider.closeScope()
+                            ScopeProvider.createScope()
                             setWebViewCookieManager(accessToken)
                             mutableState.value = State.Success(isNewbie = loginJsMessage.isNewbie)
                             fcmToken?.let { callback(dataToJsonString(LoginJsCallback(it))) }

@@ -10,9 +10,12 @@ import ui.splash.SplashScreenModel
 
 val screenModelModule = module {
     single { SplashScreenModel(get()) }
-    single { MainScreenModel(get(), get()) }
     single { LoginScreenModel(get()) }
-    single { HomeScreenModel(get()) }
-    single { FriendScreenModel(get()) }
-    single { InsightScreenModel(get()) }
+
+    scope<String> {
+        scoped { MainScreenModel(get(), get()) }
+        scoped { HomeScreenModel(get()) }
+        scoped { FriendScreenModel(get()) }
+        scoped { InsightScreenModel(get()) }
+    }
 }

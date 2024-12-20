@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import cafe.adriel.voyager.koin.koinScreenModel
+import di.ScopeProvider.getScreenModel
 import ui.component.ExceptionDialog
 import ui.component.MoimeLoading
 import ui.main.MainScreenModel
@@ -17,8 +17,8 @@ class HomeScreen : Screen {
 
     @Composable
     override fun Content() {
-        val mainScreenModel = koinScreenModel<MainScreenModel>()
-        val homeScreenModel = koinScreenModel<HomeScreenModel>()
+        val mainScreenModel = getScreenModel<MainScreenModel>()
+        val homeScreenModel = getScreenModel<HomeScreenModel>()
         val homeState by homeScreenModel.state.collectAsState()
 
         when (mainScreenModel.tabViewState.currentHomeTabView) {

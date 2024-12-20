@@ -5,10 +5,10 @@ import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
+import di.ScopeProvider.getScreenModel
 import ui.component.MoimeWebView
 import ui.friend.FriendDetailScreen
 import ui.jsbridge.FriendDetailNavigationHandler
@@ -24,7 +24,7 @@ class CreateScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val homeScreenModel = koinScreenModel<HomeScreenModel>()
+        val homeScreenModel = getScreenModel<HomeScreenModel>()
         val popHandler = PopHandler {
             navigator.pop()
             homeScreenModel.refresh()
