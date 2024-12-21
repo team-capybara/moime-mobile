@@ -9,15 +9,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.internal.BackHandler
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import di.ScopeProvider.getScreenModel
+import ui.LocalToastHandler
 import ui.component.ExceptionDialog
 import ui.component.MeetingsBottomSheet
 import ui.component.MoimeBottomNavigationBar
@@ -33,11 +36,12 @@ import ui.mypage.MyPageScreen
 import ui.notification.NotificationScreen
 
 class MainScreen : Screen {
-
     override val key: ScreenKey = uniqueScreenKey
 
+    @OptIn(InternalVoyagerApi::class)
     @Composable
     override fun Content() {
+        val toastHandler = LocalToastHandler.current
         val navigator = LocalNavigator.currentOrThrow
         val mainScreenModel = getScreenModel<MainScreenModel>()
         val mainState by mainScreenModel.state.collectAsState()
@@ -51,14 +55,22 @@ class MainScreen : Screen {
             }
         }
 
+        BackHandler(toastHandler.isShowing.not()) {
+            toastHandler.show("뒤로가기 버튼을 한 번 더 누르면 종료됩니다.")
+        }
+
+        BackHandler(toastHandler.isShowing) {
+            navigator.parent?.popAll()
+        }
+
         TabNavigator(
             tab = HomeTab,
             tabDisposable = {
                 TabDisposable(
                     navigator = it,
-                    tabs = listOf(HomeTab, InsightTab)
+                    tabs = listOf(HomeTab, InsightTab),
                 )
-            }
+            },
         ) { tabNavigator ->
             Scaffold(
                 topBar = {
@@ -66,9 +78,10 @@ class MainScreen : Screen {
                     MoimeMainTopAppBar(
                         profileImageUrl = user?.profileImageUrl ?: "",
                         currentTab = currentTabNavigator,
-                        currentTabView = mainScreenModel.tabViewState.getCurrentTabViewWithTab(
-                            currentTabNavigator
-                        ),
+                        currentTabView =
+                            mainScreenModel.tabViewState.getCurrentTabViewWithTab(
+                                currentTabNavigator,
+                            ),
                         onClickProfile = { navigator.push(MyPageScreen()) },
                         onClickUserAdd = {
                             navigator.push(FriendScreen(user))
@@ -80,7 +93,7 @@ class MainScreen : Screen {
                             mainScreenModel.setCurrentTabView(it)
                         },
                         hasUnreadNotification = mainScreenModel.hasUnreadNotification,
-                        hiddenBackground = mainScreenModel.topAppBarBackgroundVisible.not()
+                        hiddenBackground = mainScreenModel.topAppBarBackgroundVisible.not(),
                     )
                 },
                 content = {
@@ -97,7 +110,7 @@ class MainScreen : Screen {
                                     MeetingsBottomSheet(
                                         meetings = meetings,
                                         onClickMeeting = { navigator.push(MeetingScreen(it)) },
-                                        onDismissRequest = { mainScreenModel.hideMeetingsBottomSheet() }
+                                        onDismissRequest = { mainScreenModel.hideMeetingsBottomSheet() },
                                     )
                                 }
                             }
@@ -106,16 +119,16 @@ class MainScreen : Screen {
                         is MainScreenModel.State.Failure -> {
                             ExceptionDialog(
                                 exception = state.throwable,
-                                onDismiss = { mainScreenModel.clearException() }
+                                onDismiss = { mainScreenModel.clearException() },
                             )
                         }
                     }
                 },
                 bottomBar = {
                     MoimeBottomNavigationBar(
-                        onAction = { navigator.push(CreateScreen()) }
+                        onAction = { navigator.push(CreateScreen()) },
                     )
-                }
+                },
             )
         }
     }

@@ -7,19 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,34 +38,26 @@ import kotlinx.coroutines.launch
 import moime.shared.generated.resources.Res
 import moime.shared.generated.resources.add_friend
 import moime.shared.generated.resources.add_friend_desc
-import moime.shared.generated.resources.app_share_content_text
 import moime.shared.generated.resources.ic_add
 import moime.shared.generated.resources.ic_close
-import moime.shared.generated.resources.ic_export
 import moime.shared.generated.resources.ic_more
-import moime.shared.generated.resources.invite_app
-import moime.shared.generated.resources.invite_app_desc
 import moime.shared.generated.resources.manage_blocked_friends
-import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import ui.component.ExceptionDialog
 import ui.component.MoimeDialog
 import ui.component.MoimeFriendBar
 import ui.component.MoimeIconButton
-import ui.component.MoimeProfileImage
 import ui.component.PaginationColumn
 import ui.component.SafeAreaColumn
 import ui.meeting.create.CreateScreen
 import ui.model.User
 import ui.theme.Gray200
 import ui.theme.Gray50
-import ui.theme.Gray500
 import ui.theme.Gray700
-import ui.util.ShareUtil
 
-data class FriendScreen(val user: User?) : Screen {
-
+data class FriendScreen(
+    val user: User?,
+) : Screen {
     override val key: ScreenKey = uniqueScreenKey
 
     @Composable
@@ -86,24 +72,25 @@ data class FriendScreen(val user: User?) : Screen {
         }
 
         SafeAreaColumn(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp),
         ) {
             FriendTopAppBar(
                 onClose = { navigator.pop() },
                 onClickBlockList = { navigator.push(FriendBlockListScreen(friendScreenModel)) },
             )
             PaginationColumn(
-                enablePaging = when (selectedTabView) {
-                    is FriendTabView.MyFriend -> {
-                        friendState.searchedMyFriends?.canRequest()
-                            ?: friendState.myFriends.canRequest()
-                    }
+                enablePaging =
+                    when (selectedTabView) {
+                        is FriendTabView.MyFriend -> {
+                            friendState.searchedMyFriends?.canRequest()
+                                ?: friendState.myFriends.canRequest()
+                        }
 
-                    is FriendTabView.RecommendedFriend -> {
-                        friendState.searchedRecommendedFriends?.canRequest()
-                            ?: friendState.recommendedFriends.canRequest()
-                    }
-                },
+                        is FriendTabView.RecommendedFriend -> {
+                            friendState.searchedRecommendedFriends?.canRequest()
+                                ?: friendState.recommendedFriends.canRequest()
+                        }
+                    },
                 onPaging = {
                     when (selectedTabView) {
                         is FriendTabView.MyFriend -> friendScreenModel.loadMyFriends()
@@ -117,17 +104,8 @@ data class FriendScreen(val user: User?) : Screen {
                     FriendTitle()
                     Spacer(Modifier.height(36.dp))
                     FriendInvitation(
+                        userCode = user?.code ?: "",
                         profileImageUrl = user?.profileImageUrl ?: "",
-                        onShare = {
-                            coroutineScope.launch {
-                                ShareUtil.shareText(
-                                    getString(
-                                        Res.string.app_share_content_text,
-                                        user?.code ?: ""
-                                    )
-                                )
-                            }
-                        }
                     )
                     Spacer(Modifier.height(30.dp))
                     FriendFindContent(
@@ -145,10 +123,10 @@ data class FriendScreen(val user: User?) : Screen {
                     Spacer(Modifier.height(28.dp))
                     FriendListContentHeader(
                         tabViews =
-                        listOf(
-                            FriendTabView.MyFriend(friendState.friendsCount),
-                            FriendTabView.RecommendedFriend(),
-                        ),
+                            listOf(
+                                FriendTabView.MyFriend(friendState.friendsCount),
+                                FriendTabView.RecommendedFriend(),
+                            ),
                         selectedTabView = selectedTabView,
                         onTabViewChanged = { selectedTabView = it },
                         onSearch = {
@@ -177,24 +155,25 @@ data class FriendScreen(val user: User?) : Screen {
                             items(it) { searchedMyFriend ->
                                 MoimeFriendBar(
                                     friend = searchedMyFriend,
-                                    modifier = Modifier
-                                        .clickable {
-                                            navigator.push(
-                                                FriendDetailScreen(
-                                                    searchedMyFriend.id
+                                    modifier =
+                                        Modifier
+                                            .clickable {
+                                                navigator.push(
+                                                    FriendDetailScreen(
+                                                        searchedMyFriend.id,
+                                                    ),
                                                 )
-                                            )
-                                        }
-                                        .padding(start = 7.5.dp)
+                                            }.padding(start = 7.5.dp),
                                 )
                                 Spacer(Modifier.height(16.dp))
                             }
                         } ?: items(friendState.myFriends.data) { myFriend ->
                             MoimeFriendBar(
                                 friend = myFriend,
-                                modifier = Modifier
-                                    .clickable { navigator.push(FriendDetailScreen(myFriend.id)) }
-                                    .padding(start = 7.5.dp)
+                                modifier =
+                                    Modifier
+                                        .clickable { navigator.push(FriendDetailScreen(myFriend.id)) }
+                                        .padding(start = 7.5.dp),
                             )
                             Spacer(Modifier.height(16.dp))
                         }
@@ -213,15 +192,15 @@ data class FriendScreen(val user: User?) : Screen {
                                             }
                                         }
                                     },
-                                    modifier = Modifier
-                                        .clickable {
-                                            navigator.push(
-                                                FriendDetailScreen(
-                                                    searchedRecommendedFriend.id
+                                    modifier =
+                                        Modifier
+                                            .clickable {
+                                                navigator.push(
+                                                    FriendDetailScreen(
+                                                        searchedRecommendedFriend.id,
+                                                    ),
                                                 )
-                                            )
-                                        }
-                                        .padding(start = 7.5.dp)
+                                            }.padding(start = 7.5.dp),
                                 )
                                 Spacer(Modifier.height(16.dp))
                             }
@@ -236,9 +215,10 @@ data class FriendScreen(val user: User?) : Screen {
                                         }
                                     }
                                 },
-                                modifier = Modifier
-                                    .clickable { navigator.push(FriendDetailScreen(recommendedFriend.id)) }
-                                    .padding(start = 7.5.dp)
+                                modifier =
+                                    Modifier
+                                        .clickable { navigator.push(FriendDetailScreen(recommendedFriend.id)) }
+                                        .padding(start = 7.5.dp),
                             )
                             Spacer(Modifier.height(16.dp))
                         }
@@ -255,7 +235,7 @@ data class FriendScreen(val user: User?) : Screen {
         friendState.exception?.let {
             ExceptionDialog(
                 exception = it,
-                onDismiss = { friendScreenModel.clearException() }
+                onDismiss = { friendScreenModel.clearException() },
             )
         }
     }
@@ -271,11 +251,11 @@ private fun FriendTopAppBar(
 
     Row(
         modifier =
-        modifier.then(
-            Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-        ),
+            modifier.then(
+                Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+            ),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         MoimeIconButton(Res.drawable.ic_close, onClick = onClose)
@@ -328,56 +308,5 @@ private fun FriendTitle(modifier: Modifier = Modifier) {
             fontSize = 14.sp,
             color = Gray50,
         )
-    }
-}
-
-@Composable
-private fun FriendInvitation(
-    profileImageUrl: String,
-    onShare: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier.then(Modifier.fillMaxWidth())) {
-        Text(
-            stringResource(Res.string.invite_app),
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(Modifier.height(12.dp))
-        Surface(
-            color = Gray500,
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(72.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .clickable { onShare() }
-        ) {
-            Row(
-                modifier = Modifier.fillMaxSize().padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                MoimeProfileImage(
-                    imageUrl = profileImageUrl,
-                    size = 40.dp
-                )
-                Spacer(Modifier.width(9.dp))
-                Text(
-                    text = stringResource(Res.string.invite_app_desc),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Spacer(Modifier.weight(1f))
-                Icon(
-                    painterResource(Res.drawable.ic_export),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
     }
 }

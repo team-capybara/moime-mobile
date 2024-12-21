@@ -61,6 +61,7 @@
     <string name="block_friend_dialog_desc">차단을 해제하기 전까지\n%1$s님을 친구로 추가할 수 없고,\n같은 모임에 참가할 수 없어요</string>
     <string name="unblock_friend_dialog">%1$s님을 차단 해제해요</string>
     <string name="unblock_friend_dialog_desc">이제 %1$s님이 당신을\n친구로 추가할 수 있어요</string>
+    <string name="cannot_share_on_ipad">아이패드에서는 초대 공유 기능을 지원하지 않아요</string>
 
     <string name="app_share_content_text">오프라인 활동 아카이빙, 모이미\n스토어에서 "모이미"를 검색하고 코드를 통해 친구를 추가해서 모임을 함께 기록해보아요!\n친구코드: %1$s</string>
 
