@@ -20,10 +20,10 @@ import ui.theme.Gray500
 @Composable
 fun MoimeProfileImageStack(
     profileImageUrls: List<String>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.then(Modifier.size(50.dp))
+        modifier = modifier.then(Modifier.size(50.dp)),
     ) {
         when (profileImageUrls.size) {
             0 -> {}
@@ -32,7 +32,8 @@ fun MoimeProfileImageStack(
                 MoimeProfileImage(
                     profileImageUrls[0],
                     size = 36.dp,
-                    modifier = Modifier.align(Alignment.Center)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.Center),
                 )
             }
 
@@ -40,12 +41,13 @@ fun MoimeProfileImageStack(
                 MoimeProfileImage(
                     profileImageUrls[0],
                     size = 32.dp,
-                    modifier = Modifier.align(Alignment.TopStart)
+                    modifier = Modifier.align(Alignment.TopStart),
                 )
                 MoimeProfileImage(
                     profileImageUrls[1],
                     size = 32.dp,
-                    modifier = Modifier.align(Alignment.BottomEnd)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.BottomEnd),
                 )
             }
 
@@ -53,17 +55,20 @@ fun MoimeProfileImageStack(
                 MoimeProfileImage(
                     profileImageUrls[0],
                     size = 28.dp,
-                    modifier = Modifier.align(Alignment.BottomStart)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.BottomStart),
                 )
                 MoimeProfileImage(
                     profileImageUrls[1],
                     size = 28.dp,
-                    modifier = Modifier.align(Alignment.BottomEnd)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.BottomEnd),
                 )
                 MoimeProfileImage(
                     profileImageUrls[2],
                     size = 28.dp,
-                    modifier = Modifier.align(Alignment.TopCenter)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.TopCenter),
                 )
             }
 
@@ -71,33 +76,36 @@ fun MoimeProfileImageStack(
                 MoimeProfileImage(
                     profileImageUrls[0],
                     size = 25.dp,
-                    modifier = Modifier.align(Alignment.TopStart)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.TopStart),
                 )
                 MoimeProfileImage(
                     profileImageUrls[1],
                     size = 25.dp,
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.TopEnd),
                 )
                 MoimeProfileImage(
                     profileImageUrls[2],
                     size = 25.dp,
-                    modifier = Modifier.align(Alignment.BottomStart)
+                    enableBorder = true,
+                    modifier = Modifier.align(Alignment.BottomStart),
                 )
                 Surface(
                     modifier = Modifier.size(25.dp).align(Alignment.BottomEnd),
                     shape = CircleShape,
                     color = Color.Black,
-                    border = BorderStroke(1.dp, Gray500)
+                    border = BorderStroke(1.dp, Gray500),
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = "+${profileImageUrls.size - 3}",
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp,
-                            color = Gray50
+                            color = Gray50,
                         )
                     }
                 }

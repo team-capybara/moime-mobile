@@ -31,20 +31,21 @@ fun MoimeProfileImage(
     imageUrl: String,
     size: Dp? = null,
     enableBorder: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var imagePainterState by remember { mutableStateOf<AsyncImagePainter.State>(AsyncImagePainter.State.Empty) }
 
-    Box {
+    Box(modifier = modifier) {
         AnimatedVisibility(
-            visible = imagePainterState is AsyncImagePainter.State.Success,
+            visible = imagePainterState !is AsyncImagePainter.State.Loading,
             enter = fadeIn(),
-            exit = fadeOut()
+            exit = fadeOut(),
         ) {
             Box(
-                modifier = Modifier
-                    .background(color = Color.White, shape = CircleShape)
-                    .then(size?.let { Modifier.size(it) } ?: Modifier)
+                modifier =
+                    Modifier
+                        .background(color = Color.White, shape = CircleShape)
+                        .then(size?.let { Modifier.size(it) } ?: Modifier),
             )
         }
         AsyncImage(
@@ -52,12 +53,12 @@ fun MoimeProfileImage(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             placeholder = painterResource(Res.drawable.ic_profile_placeholder),
-            error = painterResource(Res.drawable.ic_profile_placeholder),
             onSuccess = { imagePainterState = it },
-            modifier = modifier
-                .then(if (enableBorder) Modifier.border(1.dp, Gray500, CircleShape) else Modifier)
-                .then(size?.let { Modifier.size(it) } ?: Modifier)
-                .then(Modifier.clip(CircleShape))
+            modifier =
+                Modifier
+                    .clip(CircleShape)
+                    .then(if (enableBorder) Modifier.border(1.dp, Gray500, CircleShape) else Modifier)
+                    .then(size?.let { Modifier.size(it) } ?: Modifier),
         )
     }
 }

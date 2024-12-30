@@ -12,7 +12,7 @@ import ui.model.Participant
 data class MeetingResponse(
     val data: List<MeetingResponseData>,
     val last: Boolean,
-    val cursorId: CursorResponse?
+    val cursorId: CursorResponse?,
 )
 
 @Serializable
@@ -27,71 +27,75 @@ data class MeetingResponseData(
     val participants: List<ParticipantResponse>,
     val bestPhotoUrl: String?,
 ) {
-    fun toUiModel() = Meeting(
-        id = id,
-        title = title,
-        startDateTimeString = startedAt.toIsoDateTimeFormat(),
-        finishDateTimeString = finishedAt?.toIsoDateTimeFormat(),
-        location = location.toUiModel(),
-        status = Meeting.Status.from(status),
-        participants = (participants + listOf(owner)).map { it.toUiModel() },
-        thumbnailUrl = bestPhotoUrl
-    )
+    fun toUiModel() =
+        Meeting(
+            id = id,
+            title = title,
+            startDateTimeString = startedAt.toIsoDateTimeFormat(),
+            finishDateTimeString = finishedAt?.toIsoDateTimeFormat(),
+            location = location.toUiModel(),
+            status = Meeting.Status.from(status),
+            participants = (listOf(owner) + participants).map { it.toUiModel() },
+            thumbnailUrl = bestPhotoUrl,
+        )
 }
 
 @Serializable
 data class LocationResponse(
     val name: String,
     val latitude: Float,
-    val longitude: Float
+    val longitude: Float,
 ) {
-    fun toUiModel() = Location(
-        name = name,
-        lat = latitude,
-        lng = longitude
-    )
+    fun toUiModel() =
+        Location(
+            name = name,
+            lat = latitude,
+            lng = longitude,
+        )
 }
 
 @Serializable
 data class ParticipantResponse(
     val userId: Long,
-    val profileImageUrl: String
+    val profileImageUrl: String,
 ) {
-    fun toUiModel() = Participant(
-        id = userId,
-        profileImageUrl = profileImageUrl
-    )
+    fun toUiModel() =
+        Participant(
+            id = userId,
+            profileImageUrl = profileImageUrl,
+        )
 }
 
 @Serializable
 data class CursorResponse(
     val cursorMoimId: Int,
-    val cursorDate: String? = null
+    val cursorDate: String? = null,
 )
 
 @Serializable
 data class MeetingCountResponse(
     val data: List<MeetingCountDataResponse>,
-    val total: Int
+    val total: Int,
 ) {
-    fun parse(): Map<LocalDate, Int> = data.associate {
-        LocalDate.parse(it.date.toIsoDateFormat()) to it.count
-    }
+    fun parse(): Map<LocalDate, Int> =
+        data.associate {
+            LocalDate.parse(it.date.toIsoDateFormat()) to it.count
+        }
 }
 
 @Serializable
 data class MeetingCountDataResponse(
     val date: String,
-    val count: Int
+    val count: Int,
 )
 
 @Serializable
 data class MeetingDateResponse(
     val data: List<MeetingResponseData>,
-    val total: Int
+    val total: Int,
 )
 
 @Serializable
 data class MeetingCountPerMonthResponse(
-    val count: Int
+    val count: Int,
 )
