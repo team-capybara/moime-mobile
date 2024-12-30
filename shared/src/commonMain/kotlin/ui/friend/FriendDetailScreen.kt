@@ -34,6 +34,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import di.ScopeProvider.scopeScreenModel
 import moime.shared.generated.resources.Res
 import moime.shared.generated.resources.add_friend
 import moime.shared.generated.resources.block
@@ -68,16 +69,20 @@ import ui.theme.MoimeGreen
 import ui.theme.MoimeRed
 import ui.util.DateUtil.daysUntilNow
 
-data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponent {
-
+data class FriendDetailScreen(
+    private val targetId: Long,
+) : Screen,
+    KoinComponent {
     override val key: ScreenKey = uniqueScreenKey
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val screenModel = rememberScreenModel {
-            FriendDetailScreenModel(targetId, get(), get(), get())
-        }
+        val friendScreenModel = scopeScreenModel<FriendScreenModel>()
+        val screenModel =
+            rememberScreenModel {
+                FriendDetailScreenModel(targetId, friendScreenModel, get(), get())
+            }
         val state by screenModel.state.collectAsState()
 
         SafeAreaColumn {
@@ -90,46 +95,48 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
                 item {
                     MoimeSimpleTopAppBar(
                         backIconRes = Res.drawable.ic_close,
-                        onBack = { navigator.pop() }
+                        onBack = { navigator.pop() },
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = stringResource(Res.string.profile),
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 24.sp
+                            fontSize = 24.sp,
                         )
                         Text(
-                            text = stringResource(
-                                if (state.stranger.blocked) Res.string.unblock else Res.string.block
-                            ),
+                            text =
+                                stringResource(
+                                    if (state.stranger.blocked) Res.string.unblock else Res.string.block,
+                                ),
                             fontWeight = FontWeight.Normal,
                             color = MoimeRed,
                             fontSize = 16.sp,
-                            modifier = Modifier.clickable {
-                                if (state.stranger.blocked) {
-                                    screenModel.unblock()
-                                } else {
-                                    screenModel.block()
-                                }
-                            }
+                            modifier =
+                                Modifier.clickable {
+                                    if (state.stranger.blocked) {
+                                        screenModel.unblock()
+                                    } else {
+                                        screenModel.block()
+                                    }
+                                },
                         )
                     }
                     Spacer(Modifier.height(24.dp))
                     MoimeProfileImage(
                         imageUrl = state.stranger.profileImageUrl,
-                        size = 80.dp
+                        size = 80.dp,
                     )
                     Spacer(Modifier.height(16.dp))
                     Text(
                         text = state.stranger.nickname,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
                     )
                     Spacer(Modifier.height(16.dp))
                     if (state.stranger.friendshipDateTime == null) {
@@ -142,15 +149,16 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
                             },
                             shape = RoundedCornerShape(8.dp),
                             contentPadding = PaddingValues(horizontal = 18.dp, vertical = 6.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                contentColor = Color.Black,
-                                containerColor = MoimeGreen
-                            )
+                            colors =
+                                ButtonDefaults.buttonColors(
+                                    contentColor = Color.Black,
+                                    containerColor = MoimeGreen,
+                                ),
                         ) {
                             Text(
                                 text = stringResource(Res.string.add_friend),
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp
+                                fontSize = 16.sp,
                             )
                         }
                     } else {
@@ -159,7 +167,7 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
                     Spacer(Modifier.height(24.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         val daysUntilGetFriend = state.stranger.friendshipDateTime?.daysUntilNow()
                         FriendDetailCard(
@@ -167,25 +175,25 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
                             titleRes = Res.string.from_get_friend,
                             content = daysUntilGetFriend?.toString() ?: "--",
                             trailingStringRes = daysUntilGetFriend?.let { Res.string.day_count },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         FriendDetailCard(
                             leadingIconRes = Res.drawable.ic_timer,
                             titleRes = Res.string.meeting_count_month,
                             content = state.meetingsTotalCount.toString(),
                             trailingStringRes = Res.string.meeting_count,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                     }
                     Spacer(Modifier.height(24.dp))
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
                             text = stringResource(Res.string.meeting_current_month),
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 16.sp
+                            fontSize = 16.sp,
                         )
                     }
                     Spacer(Modifier.height(16.dp))
@@ -195,7 +203,7 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
                         meeting = it,
                         onClick = { navigator.push(MeetingScreen(it)) },
                         isAnotherActiveMeetingCardFocusing = false,
-                        forceDefaultHeightStyle = true
+                        forceDefaultHeightStyle = true,
                     )
                     Spacer(Modifier.height(8.dp))
                 }
@@ -213,7 +221,7 @@ data class FriendDetailScreen(private val targetId: Long) : Screen, KoinComponen
         state.exception?.let {
             ExceptionDialog(
                 exception = it,
-                onDismiss = { screenModel.clearException() }
+                onDismiss = { screenModel.clearException() },
             )
         }
     }
@@ -225,47 +233,47 @@ private fun FriendDetailCard(
     titleRes: StringResource,
     content: String,
     trailingStringRes: StringResource?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         color = Gray500,
         shape = RoundedCornerShape(12.dp),
-        modifier = modifier.then(Modifier.height(76.dp))
+        modifier = modifier.then(Modifier.height(76.dp)),
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(8.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     painterResource(leadingIconRes),
                     contentDescription = null,
                     tint = Gray400,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(16.dp),
                 )
                 Text(
                     text = stringResource(titleRes),
                     color = Gray400,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
                 )
             }
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
             ) {
                 Text(
                     text = content,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 trailingStringRes?.let {
                     Text(
                         text = stringResource(it),
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }
             }
