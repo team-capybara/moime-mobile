@@ -6,19 +6,18 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import di.ScopeProvider.getScreenModel
+import di.ScopeProvider.scopeScreenModel
 import ui.component.ExceptionDialog
 import ui.component.MoimeLoading
 import ui.main.MainScreenModel
 
 class HomeScreen : Screen {
-
     override val key: ScreenKey = uniqueScreenKey
 
     @Composable
     override fun Content() {
-        val mainScreenModel = getScreenModel<MainScreenModel>()
-        val homeScreenModel = getScreenModel<HomeScreenModel>()
+        val mainScreenModel = scopeScreenModel<MainScreenModel>()
+        val homeScreenModel = scopeScreenModel<HomeScreenModel>()
         val homeState by homeScreenModel.state.collectAsState()
 
         when (mainScreenModel.tabViewState.currentHomeTabView) {
@@ -31,7 +30,7 @@ class HomeScreen : Screen {
                         isActiveMeetingVisible = mainScreenModel.topAppBarBackgroundVisible.not(),
                         onActiveMeetingVisibleChanged = {
                             mainScreenModel.setTopAppBarBackgroundVisibility(it.not())
-                        }
+                        },
                     )
                 } else {
                     MoimeLoading()
@@ -45,14 +44,14 @@ class HomeScreen : Screen {
                             mainScreenModel.showMeetingsBottomSheet(it)
                         }
                     },
-                    onRefresh = { homeScreenModel.refreshCalendarState() }
+                    onRefresh = { homeScreenModel.refreshCalendarState() },
                 )
             }
         }
         homeState.exception?.let {
             ExceptionDialog(
                 exception = it,
-                onDismiss = { homeScreenModel.clearException() }
+                onDismiss = { homeScreenModel.clearException() },
             )
         }
     }

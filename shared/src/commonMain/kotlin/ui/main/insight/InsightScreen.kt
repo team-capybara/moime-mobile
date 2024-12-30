@@ -6,19 +6,18 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import di.ScopeProvider.getScreenModel
+import di.ScopeProvider.scopeScreenModel
 import ui.component.ExceptionDialog
 import ui.component.MoimeLoading
 import ui.main.MainScreenModel
 
 class InsightScreen : Screen {
-
     override val key: ScreenKey = uniqueScreenKey
 
     @Composable
     override fun Content() {
-        val mainScreenModel = getScreenModel<MainScreenModel>()
-        val insightScreenModel = getScreenModel<InsightScreenModel>()
+        val mainScreenModel = scopeScreenModel<MainScreenModel>()
+        val insightScreenModel = scopeScreenModel<InsightScreenModel>()
         val insightState by insightScreenModel.state.collectAsState()
 
         when (val state = insightState) {
@@ -37,7 +36,7 @@ class InsightScreen : Screen {
                     InsightTabView.Friend -> {
                         InsightFriendContent(
                             survey = state.survey,
-                            onSubmit = insightScreenModel::postSurvey
+                            onSubmit = insightScreenModel::postSurvey,
                         )
                     }
                 }
@@ -46,7 +45,7 @@ class InsightScreen : Screen {
             is InsightScreenModel.State.Failure -> {
                 ExceptionDialog(
                     exception = state.throwable,
-                    onDismiss = { insightScreenModel.clearException() }
+                    onDismiss = { insightScreenModel.clearException() },
                 )
             }
         }

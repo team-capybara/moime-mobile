@@ -8,25 +8,25 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
-import di.ScopeProvider.getScreenModel
+import di.ScopeProvider.scopeScreenModel
 import ui.component.MoimeWebView
 import ui.jsbridge.PopHandler
 import ui.jsbridge.WEBVIEW_BASE_URL
 import ui.main.MainScreenModel
 
 class NotificationScreen : Screen {
-
     override val key: ScreenKey = uniqueScreenKey
 
     @OptIn(InternalVoyagerApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val mainScreenModel = getScreenModel<MainScreenModel>()
-        val popHandler = PopHandler {
-            mainScreenModel.refreshUnreadNotification()
-            navigator.pop()
-        }
+        val mainScreenModel = scopeScreenModel<MainScreenModel>()
+        val popHandler =
+            PopHandler {
+                mainScreenModel.refreshUnreadNotification()
+                navigator.pop()
+            }
 
         BackHandler(true) {
             mainScreenModel.refreshUnreadNotification()
@@ -35,7 +35,7 @@ class NotificationScreen : Screen {
 
         MoimeWebView(
             url = WEBVIEW_BASE_URL + NotificationScreenModel.WEBVIEW_URL_PATH_NOTIFICATION,
-            jsMessageHandlers = listOf(popHandler)
+            jsMessageHandlers = listOf(popHandler),
         )
     }
 }

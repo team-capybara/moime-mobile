@@ -12,7 +12,6 @@ import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.scope.Scope
 
 object ScopeProvider : KoinComponent {
-
     private val koin = getKoin()
 
     var scope: Scope? = null
@@ -30,13 +29,12 @@ object ScopeProvider : KoinComponent {
     }
 
     @Composable
-    inline fun <reified T : ScreenModel> Screen.getScreenModel(
-        noinline parameters: ParametersDefinition? = null
-    ): T {
+    inline fun <reified T : ScreenModel> Screen.scopeScreenModel(noinline parameters: ParametersDefinition? = null): T {
         val currentParameters by rememberUpdatedState(parameters)
         val tag = remember(scope) { scope?.scopeQualifier?.value }
         return rememberScreenModel(tag = tag) {
-            scope?.get<T>(parameters = currentParameters) ?: error("Scope is not created: ${T::class.simpleName}")
+            scope?.get<T>(parameters = currentParameters)
+                ?: error("Scope is not created: ${T::class.simpleName}")
         }
     }
 

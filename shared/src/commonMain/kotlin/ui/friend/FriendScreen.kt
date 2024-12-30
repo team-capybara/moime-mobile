@@ -33,7 +33,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import di.ScopeProvider.getScreenModel
+import di.ScopeProvider.scopeScreenModel
 import kotlinx.coroutines.launch
 import moime.shared.generated.resources.Res
 import moime.shared.generated.resources.add_friend
@@ -64,7 +64,7 @@ data class FriendScreen(
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val coroutineScope = rememberCoroutineScope()
-        val friendScreenModel = getScreenModel<FriendScreenModel>()
+        val friendScreenModel = scopeScreenModel<FriendScreenModel>()
         val friendState by friendScreenModel.state.collectAsState()
 
         var selectedTabView by remember {

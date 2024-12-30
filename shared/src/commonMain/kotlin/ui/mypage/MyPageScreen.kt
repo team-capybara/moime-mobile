@@ -15,7 +15,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
-import di.ScopeProvider.getScreenModel
+import di.ScopeProvider.scopeScreenModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ui.component.MoimeImagePicker
@@ -28,7 +28,6 @@ import ui.main.MainScreenModel
 import ui.util.Base64Util.encodeToBase64
 
 class MyPageScreen : Screen {
-
     override val key: ScreenKey = uniqueScreenKey
 
     @OptIn(InternalVoyagerApi::class)
@@ -37,18 +36,20 @@ class MyPageScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         val permissionFactory = rememberPermissionsControllerFactory()
-        val permissionController = remember(permissionFactory) {
-            permissionFactory.createPermissionsController()
-        }
+        val permissionController =
+            remember(permissionFactory) {
+                permissionFactory.createPermissionsController()
+            }
         BindEffect(permissionController)
 
-        val mainScreenModel = getScreenModel<MainScreenModel>()
+        val mainScreenModel = scopeScreenModel<MainScreenModel>()
         val myPageScreenModel = rememberScreenModel { MyPageScreenModel(permissionController) }
         val state by myPageScreenModel.state.collectAsState()
-        val popHandler = PopHandler {
-            navigator.pop()
-            mainScreenModel.refresh()
-        }
+        val popHandler =
+            PopHandler {
+                navigator.pop()
+                mainScreenModel.refresh()
+            }
 
         BackHandler(true) {
             navigator.pop()
@@ -63,10 +64,12 @@ class MyPageScreen : Screen {
 
         MoimeWebView(
             url = WEBVIEW_BASE_URL + MyPageScreenModel.WEBVIEW_URL_PATH_MY_PAGE,
-            jsMessageHandlers = myPageScreenModel.jsMessageHandler.getHandlers() + listOf(
-                myPageScreenModel.imagePickerHandler,
-                popHandler
-            )
+            jsMessageHandlers =
+                myPageScreenModel.jsMessageHandler.getHandlers() +
+                    listOf(
+                        myPageScreenModel.imagePickerHandler,
+                        popHandler,
+                    ),
         )
 
         state.onImagePicked?.let { callback ->

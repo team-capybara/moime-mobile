@@ -19,7 +19,7 @@ import cafe.adriel.voyager.navigator.internal.BackHandler
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import di.ScopeProvider.getScreenModel
+import di.ScopeProvider.scopeScreenModel
 import ui.LocalToastHandler
 import ui.component.ExceptionDialog
 import ui.component.MeetingsBottomSheet
@@ -43,7 +43,7 @@ class MainScreen : Screen {
     override fun Content() {
         val toastHandler = LocalToastHandler.current
         val navigator = LocalNavigator.currentOrThrow
-        val mainScreenModel = getScreenModel<MainScreenModel>()
+        val mainScreenModel = scopeScreenModel<MainScreenModel>()
         val mainState by mainScreenModel.state.collectAsState()
         var user by remember { mutableStateOf<User?>(null) }
         val selectedDateMeetings = mainScreenModel.selectedDateMeetings
