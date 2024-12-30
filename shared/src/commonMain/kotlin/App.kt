@@ -15,7 +15,6 @@ import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import cafe.adriel.voyager.transitions.SlideTransition
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
-import coil3.request.CachePolicy
 import coil3.request.crossfade
 import dev.chrisbanes.haze.HazeState
 import ui.LocalHazeState
@@ -32,9 +31,8 @@ import ui.theme.MoimeTheme
 @Composable
 fun App() {
     setSingletonImageLoaderFactory { context ->
-        ImageLoader.Builder(context)
-            .diskCachePolicy(CachePolicy.DISABLED)
-            .memoryCachePolicy(CachePolicy.DISABLED)
+        ImageLoader
+            .Builder(context)
             .crossfade(true)
             .build()
     }
@@ -49,18 +47,19 @@ fun App() {
                     CompositionLocalProvider(
                         LocalScreenSize provides screenSize,
                         LocalHazeState provides HazeState(),
-                        LocalToastHandler provides ToastHandler(
-                            isShowing = toastState != null,
-                            onShow = { toastState = it }
-                        )
+                        LocalToastHandler provides
+                            ToastHandler(
+                                isShowing = toastState != null,
+                                onShow = { toastState = it },
+                            ),
                     ) {
                         Navigator(
                             screen = SplashScreen(),
-                            disposeBehavior = NavigatorDisposeBehavior(disposeSteps = false)
+                            disposeBehavior = NavigatorDisposeBehavior(disposeSteps = false),
                         ) { navigator ->
                             SlideTransition(
                                 navigator = navigator,
-                                disposeScreenAfterTransitionEnd = true
+                                disposeScreenAfterTransitionEnd = true,
                             )
                         }
                     }
@@ -69,7 +68,7 @@ fun App() {
                     MoimeToast(
                         state = it,
                         onDismissRequest = { toastState = null },
-                        modifier = Modifier.align(Alignment.BottomCenter)
+                        modifier = Modifier.align(Alignment.BottomCenter),
                     )
                 }
             }
@@ -80,9 +79,10 @@ fun App() {
 
             screenSize = ScreenSize(width, height)
 
-            val placeables = measurables.map { measurable ->
-                measurable.measure(constraints)
-            }
+            val placeables =
+                measurables.map { measurable ->
+                    measurable.measure(constraints)
+                }
 
             layout(width, height) {
                 var yPosition = 0
@@ -91,6 +91,6 @@ fun App() {
                     yPosition += placeable.height
                 }
             }
-        }
+        },
     )
 }

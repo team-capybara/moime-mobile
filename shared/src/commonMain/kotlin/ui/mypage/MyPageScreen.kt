@@ -13,6 +13,7 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.internal.BackHandler
+import coil3.compose.LocalPlatformContext
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import di.ScopeProvider.scopeScreenModel
@@ -26,6 +27,7 @@ import ui.jsbridge.WEBVIEW_BASE_URL
 import ui.login.LoginScreen
 import ui.main.MainScreenModel
 import ui.util.Base64Util.encodeToBase64
+import ui.util.CoilUtil
 
 class MyPageScreen : Screen {
     override val key: ScreenKey = uniqueScreenKey
@@ -45,13 +47,18 @@ class MyPageScreen : Screen {
         val mainScreenModel = scopeScreenModel<MainScreenModel>()
         val myPageScreenModel = rememberScreenModel { MyPageScreenModel(permissionController) }
         val state by myPageScreenModel.state.collectAsState()
+        val context = LocalPlatformContext.current
         val popHandler =
             PopHandler {
+                CoilUtil.clearDiskCache(context)
+                CoilUtil.clearMemoryCache(context)
                 navigator.pop()
                 mainScreenModel.refresh()
             }
 
         BackHandler(true) {
+            CoilUtil.clearDiskCache(context)
+            CoilUtil.clearMemoryCache(context)
             navigator.pop()
             mainScreenModel.refresh()
         }
