@@ -37,7 +37,7 @@
 - Compose Multiplatform
 - MVVM Pattern
 - [Voyager](https://github.com/adrielcafe/voyager) for navigation & ViewModel.
-- [Koin](https://github.com/InsertKoinIO/koin) for dependecy injection.
+- [Koin](https://github.com/InsertKoinIO/koin) for dependency injection.
 - [Ktor](https://github.com/ktorio/ktor) for networking.
 - [Coil](https://github.com/coil-kt/coil) for loading images.
 - [FileKit](https://github.com/vinceglb/FileKit) for file I/O.
