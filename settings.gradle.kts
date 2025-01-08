@@ -15,5 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "moime"
-include(":androidApp")
-include(":shared")
+include(":app")

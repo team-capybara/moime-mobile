@@ -1,0 +1,80 @@
+package team.capybara.moime.ui.component
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import team.capybara.moime.ui.ToastState
+import team.capybara.moime.ui.theme.Gray50
+import team.capybara.moime.ui.theme.Gray900
+
+@Composable
+fun MoimeToast(
+    state: ToastState,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    containerColor: Color = Gray900.copy(0.87f),
+    contentColor: Color = Gray50
+) {
+    val density = LocalDensity.current
+    val bottomPadding = with(density) {
+        WindowInsets.navigationBars.getBottom(this)
+    } + TOAST_BOTTOM_PADDING
+    val visibleState = remember {
+        MutableTransitionState(false).apply {
+            targetState = true
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        delay(TOAST_ANIMATION_DURATION_MILLIS.toLong())
+        delay(state.duration)
+        visibleState.targetState = false
+        delay(TOAST_ANIMATION_DURATION_MILLIS.toLong())
+        onDismissRequest()
+    }
+
+    AnimatedVisibility(
+        visibleState = visibleState,
+        enter = fadeIn(tween(TOAST_ANIMATION_DURATION_MILLIS)),
+        exit = fadeOut(tween(TOAST_ANIMATION_DURATION_MILLIS)),
+        modifier = modifier.then(
+            Modifier.padding(bottom = bottomPadding.dp)
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .height(TOAST_HEIGHT.dp)
+                .background(color = containerColor, shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = state.message,
+                color = contentColor,
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = 24.dp)
+            )
+        }
+    }
+}
+
+private const val TOAST_HEIGHT = 48
+private const val TOAST_ANIMATION_DURATION_MILLIS = 300
+private const val TOAST_BOTTOM_PADDING = 0
