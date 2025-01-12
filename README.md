@@ -15,11 +15,11 @@
 </p>
 
 <p align="center">
-모임의 추억은 더 선명하게, 소셜 인사이트는 더 풍부하게! 모이미가 당신의 특별한 추억 저장소가 될게요.
+  <img width="80%" src="https://github.com/user-attachments/assets/0c9af158-3214-4604-aac5-abc56b7795ab" />
 </p>
 
 <p align="center">
-  <img width="80%" src="https://github.com/user-attachments/assets/0c9af158-3214-4604-aac5-abc56b7795ab" />
+모임의 추억은 더 선명하게, 소셜 인사이트는 더 풍부하게! 모이미가 당신의 특별한 추억 저장소가 될게요.
 </p>
 
 <br>
@@ -35,7 +35,8 @@
 # Stacks 🔧
 - Kotlin Multiplatform (JVM/Native)
 - Compose Multiplatform
-- MVVM Pattern
+- Multi Modules
+- UDF with MVVM Pattern
 - [Voyager](https://github.com/adrielcafe/voyager) for navigation & ViewModel.
 - [Koin](https://github.com/InsertKoinIO/koin) for dependency injection.
 - [Ktor](https://github.com/ktorio/ktor) for networking.
