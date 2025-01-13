@@ -44,6 +44,9 @@ camerax = "1.3.2"
 
 desugar = "2.1.4"
 
+ktlint = "0.50.0"
+spotless = "7.0.1"
+
 [libraries]
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "coroutines" }
@@ -107,6 +110,7 @@ kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plu
 kotlinxSerializationGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 composeCompilerGradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
 composeGradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose-multiplatform" }
+spotlessGradlePlugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 
 [bundles]
 voyager = [
@@ -132,7 +136,8 @@ plugins = [
     "kotlinGradlePlugin",
     "kotlinxSerializationGradlePlugin",
     "composeCompilerGradlePlugin",
-    "composeGradlePlugin"
+    "composeGradlePlugin",
+    "spotlessGradlePlugin"
 ]
 
 [plugins]
@@ -144,3 +149,4 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "gms" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
