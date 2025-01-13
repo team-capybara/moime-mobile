@@ -32,6 +32,10 @@ dependencies {
 
 gradlePlugin {
     plugins {
+        register("base") {
+            id = "moime.convention.base"
+            implementationClass = "team.capybara.moime.buildlogic.convention.BaseConventionPlugin"
+        }
         register("kmp") {
             id = "moime.convention.kmp"
             implementationClass = "team.capybara.moime.buildlogic.convention.KmpPlugin"
@@ -50,7 +54,8 @@ gradlePlugin {
         }
         register("kotlinSerialization") {
             id = "moime.convention.kotlin.serialization"
-            implementationClass = "team.capybara.moime.buildlogic.convention.KotlinSerializationPlugin"
+            implementationClass =
+                "team.capybara.moime.buildlogic.convention.KotlinSerializationPlugin"
         }
         register("kotlinAndroid") {
             id = "moime.convention.kotlin.android"
@@ -58,7 +63,8 @@ gradlePlugin {
         }
         register("androidApplication") {
             id = "moime.convention.android.application"
-            implementationClass = "team.capybara.moime.buildlogic.convention.AndroidApplicationPlugin"
+            implementationClass =
+                "team.capybara.moime.buildlogic.convention.AndroidApplicationPlugin"
         }
         register("androidLibrary") {
             id = "moime.convention.android.library"
@@ -67,6 +73,20 @@ gradlePlugin {
         register("googleServices") {
             id = "moime.convention.google.services"
             implementationClass = "team.capybara.moime.buildlogic.convention.GoogleServicesPlugin"
+        }
+        register("spotless") {
+            id = "moime.convention.spotless"
+            implementationClass =
+                "team.capybara.moime.buildlogic.convention.SpotlessConventionPlugin"
+        }
+        register("dependencyGraph") {
+            id = "moime.convention.dependencyGraph"
+            implementationClass =
+                "team.capybara.moime.buildlogic.convention.DependencyGraphPlugin"
+        }
+        register("detekt") {
+            id = "moime.convention.detekt"
+            implementationClass = "team.capybara.moime.buildlogic.convention.DetektPlugin"
         }
     }
 }

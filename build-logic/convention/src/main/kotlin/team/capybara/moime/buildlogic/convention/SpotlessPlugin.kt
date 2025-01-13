@@ -5,7 +5,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-open class SpotlessConventionPlugin : Plugin<Project> {
+@Suppress("unused")
+class SpotlessPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -20,13 +21,11 @@ open class SpotlessConventionPlugin : Plugin<Project> {
                 format("kts") {
                     target("**/*.kts")
                     targetExclude("**/build/**/*.kts")
-                    // Look for the first line that doesn't have a block comment (assumed to be the license)
                     licenseHeader(licenseHeaderKotlin, "(^(?![\\/ ]\\*).*$)")
                 }
                 format("xml") {
                     target("**/*.xml")
                     targetExclude("**/build/**/*.xml")
-                    // Look for the first XML tag that isn't a comment (<!--) or the xml declaration (<?xml)
                     licenseHeader(licenseHeaderXml, "(^(?![\\/ ]\\*).*$)")
                 }
             }
