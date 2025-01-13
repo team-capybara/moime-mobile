@@ -6,3 +6,5 @@ enum class Platform {
 }
 
 expect fun getPlatform(): Platform
+
+expect fun getVersionString(): String

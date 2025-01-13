@@ -1,16 +1,13 @@
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.androidLibrary)
+    id("moime.convention.kmp")
+    id("moime.convention.kmp.android")
+    id("moime.convention.kmp.ios")
+    id("moime.convention.kmp.compose")
 }
 
-kotlin {
-    androidTarget()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+android.namespace = "team.capybara.moime.core.designsystem"
 
+kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -23,29 +20,6 @@ kotlin {
             }
         }
     }
-}
-
-android {
-    namespace = "team.capybara.moime.core.designsystem"
-    compileSdk = libs.versions.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-}
-
-dependencies {
-    coreLibraryDesugaring(libs.android.desugar)
 }
 
 compose.resources {
