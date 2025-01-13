@@ -1,4 +1,5 @@
 plugins {
+    id("moime.convention.base")
     id("moime.convention.kmp")
     id("moime.convention.kmp.android")
     id("moime.convention.kmp.ios")
