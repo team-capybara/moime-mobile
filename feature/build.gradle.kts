@@ -1,17 +1,14 @@
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.composeCompiler)
+    id("moime.convention.kmp")
+    id("moime.convention.kmp.android")
+    id("moime.convention.kmp.ios")
+    id("moime.convention.kmp.compose")
+    id("moime.convention.kotlin.serialization")
 }
 
-kotlin {
-    androidTarget()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+android.namespace = "team.capybara.moime.core.feature"
 
+kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.ui)
@@ -22,13 +19,6 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(libs.coroutines.core)
-
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
 
             implementation(libs.koin.core)
 
@@ -62,21 +52,4 @@ kotlin {
             implementation(libs.ktor.client.auth)
         }
     }
-}
-
-android {
-    namespace = "team.capybara.moime.core.feature"
-    compileSdk = libs.versions.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-}
-
-dependencies {
-    coreLibraryDesugaring(libs.android.desugar)
 }

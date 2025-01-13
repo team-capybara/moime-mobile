@@ -1,12 +1,13 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    id("moime.convention.kmp")
+    id("moime.convention.kmp.compose")
+    id("moime.convention.kmp.ios")
+    id("moime.convention.google.services")
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -16,11 +17,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
+    targets.filterIsInstance<KotlinNativeTarget>().forEach {
         it.binaries.framework {
             baseName = "app"
             isStatic = true
@@ -35,13 +32,6 @@ kotlin {
             implementation(projects.core.data)
             implementation(projects.core.network)
             implementation(projects.feature)
-
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
 
             implementation(libs.koin.core)
 
@@ -78,7 +68,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.compose.multiplatform.get()
     }
     packaging {
         resources {
