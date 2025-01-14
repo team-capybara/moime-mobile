@@ -27,6 +27,7 @@ import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import team.capybara.moime.core.data.repository.UserRepository
+import team.capybara.moime.core.ui.jsbridge.APP_VERSION
 import team.capybara.moime.core.ui.jsbridge.ImagePickerHandler
 import team.capybara.moime.feature.login.LoginScreenModel
 
@@ -63,7 +64,7 @@ class MyPageScreenModel(
 
     private fun onGetAppVersion(callback: (String) -> Unit) {
         val jsCallbackResponse = AppVersionJsCallback(
-            version = "1.0.0" //TODO: Get app version from gradle
+            version = APP_VERSION
         )
         callback(Json.encodeToString((jsCallbackResponse)))
     }
