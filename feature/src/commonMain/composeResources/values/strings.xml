@@ -32,6 +32,7 @@
     <string name="it_is_me">내 0호 친구는 나</string>
     <string name="manage_blocked_friends">차단친구 관리</string>
     <string name="unblock">차단 해제</string>
+    <string name="empty_friend_meetings">진행한 모임이 아직 없어요</string>
 
     <string name="cannot_find_friend">친구를 찾을 수 없습니다</string>
     <string name="cannot_find_friend_desc">코드를 다시 입력해주세요</string>

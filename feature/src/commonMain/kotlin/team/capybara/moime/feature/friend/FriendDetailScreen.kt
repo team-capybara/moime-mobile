@@ -18,6 +18,7 @@ package team.capybara.moime.feature.friend
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -57,6 +58,7 @@ import moime.feature.generated.resources.Res
 import moime.feature.generated.resources.add_friend
 import moime.feature.generated.resources.block
 import moime.feature.generated.resources.day_count
+import moime.feature.generated.resources.empty_friend_meetings
 import moime.feature.generated.resources.from_get_friend
 import moime.feature.generated.resources.meeting_count
 import moime.feature.generated.resources.meeting_count_month
@@ -126,20 +128,20 @@ data class FriendDetailScreen(
                         )
                         Text(
                             text =
-                                stringResource(
-                                    if (state.stranger.blocked) Res.string.unblock else Res.string.block,
-                                ),
+                            stringResource(
+                                if (state.stranger.blocked) Res.string.unblock else Res.string.block,
+                            ),
                             fontWeight = FontWeight.Normal,
                             color = MoimeRed,
                             fontSize = 16.sp,
                             modifier =
-                                Modifier.clickable {
-                                    if (state.stranger.blocked) {
-                                        screenModel.unblock()
-                                    } else {
-                                        screenModel.block()
-                                    }
-                                },
+                            Modifier.clickable {
+                                if (state.stranger.blocked) {
+                                    screenModel.unblock()
+                                } else {
+                                    screenModel.block()
+                                }
+                            },
                         )
                     }
                     Spacer(Modifier.height(24.dp))
@@ -166,10 +168,10 @@ data class FriendDetailScreen(
                             shape = RoundedCornerShape(8.dp),
                             contentPadding = PaddingValues(horizontal = 18.dp, vertical = 6.dp),
                             colors =
-                                ButtonDefaults.buttonColors(
-                                    contentColor = Color.Black,
-                                    containerColor = MoimeGreen,
-                                ),
+                            ButtonDefaults.buttonColors(
+                                contentColor = Color.Black,
+                                containerColor = MoimeGreen,
+                            ),
                         ) {
                             Text(
                                 text = stringResource(Res.string.add_friend),
@@ -214,14 +216,27 @@ data class FriendDetailScreen(
                     }
                     Spacer(Modifier.height(16.dp))
                 }
-                items(state.meetings.data) {
-                    MoimeMeetingCard(
-                        meeting = it,
-                        onClick = { navigator.push(MeetingScreen(it)) },
-                        isAnotherActiveMeetingCardFocusing = false,
-                        forceDefaultHeightStyle = true,
-                    )
-                    Spacer(Modifier.height(8.dp))
+                state.meetings.data.takeIf { it.isNotEmpty() }?.let { meetings ->
+                    items(meetings) {
+                        MoimeMeetingCard(
+                            meeting = it,
+                            onClick = { navigator.push(MeetingScreen(it)) },
+                            isAnotherActiveMeetingCardFocusing = false,
+                            forceDefaultHeightStyle = true,
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
+                } ?: item {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.empty_friend_meetings),
+                            color = Gray400,
+                            modifier = Modifier.padding(vertical = 32.dp)
+                        )
+                    }
                 }
                 item {
                     Spacer(Modifier.height(8.dp))
