@@ -16,7 +16,10 @@
 
 package team.capybara.moime.core.model
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 data class Meeting(
     val id: Long,
@@ -28,6 +31,9 @@ data class Meeting(
     val participants: List<Participant>,
     val thumbnailUrl: String? = null
 ) : JavaSerializable {
+
+    val isActive
+        get() = status == Status.Ongoing || startDateTime.isToday && status != Status.Completed
 
     val startDateTime: LocalDateTime
         get() = LocalDateTime.parse(startDateTimeString)
@@ -49,3 +55,6 @@ data class Meeting(
         }
     }
 }
+
+private val LocalDateTime.isToday
+    get() = date == Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date

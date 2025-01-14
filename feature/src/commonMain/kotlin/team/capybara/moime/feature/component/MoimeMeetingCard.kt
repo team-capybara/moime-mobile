@@ -90,7 +90,6 @@ import team.capybara.moime.core.designsystem.theme.PPObjectSansFontFamily
 import team.capybara.moime.core.model.Meeting
 import team.capybara.moime.core.ui.component.MoimeProfileImageStack
 import team.capybara.moime.core.ui.compositionlocal.LocalScreenSize
-import team.capybara.moime.feature.home.isActive
 
 @Suppress("ktlint:standard:max-line-length")
 @Composable

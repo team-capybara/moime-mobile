@@ -67,12 +67,9 @@ import moime.feature.generated.resources.empty_meetings_desc
 import moime.feature.generated.resources.img_empty_meetings
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import team.capybara.moime.core.common.util.DateUtil.isToday
 import team.capybara.moime.core.designsystem.theme.Gray400
 import team.capybara.moime.core.designsystem.theme.Gray50
 import team.capybara.moime.core.designsystem.theme.Gray500
-import team.capybara.moime.core.model.Meeting
-import team.capybara.moime.core.model.Meeting.Status
 import team.capybara.moime.core.ui.component.PaginationColumn
 import team.capybara.moime.core.ui.compositionlocal.LocalHazeState
 import team.capybara.moime.core.ui.compositionlocal.LocalScreenSize
@@ -251,9 +248,6 @@ fun HomeListView(
         }
     }
 }
-
-val Meeting.isActive
-    get() = startDateTime.isToday() && status != Status.Completed
 
 private val colorStops = arrayOf(
     0.0f to Color(0xCC25FF89),
