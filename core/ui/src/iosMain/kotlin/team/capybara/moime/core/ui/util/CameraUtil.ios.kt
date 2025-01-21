@@ -19,6 +19,7 @@ package team.capybara.moime.core.ui.util
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.UIKitView
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -330,6 +332,7 @@ private fun BoxScope.RealDeviceCamera(
     progressIndicator: @Composable () -> Unit,
     onCapture: (byteArray: ByteArray?) -> Unit,
 ) {
+    val density = LocalDensity.current
     var isFrontCamera by remember { mutableStateOf(camera.position == AVCaptureDevicePositionFront) }
     val capturePhotoOutput = remember { AVCapturePhotoOutput() }
     var actualOrientation by remember {
@@ -497,34 +500,39 @@ private fun BoxScope.RealDeviceCamera(
         }
     }
 
-    UIKitView(
-        modifier = Modifier.fillMaxSize().background(color = Color.Black),
-        factory = {
-            val dispatchGroup = dispatch_group_create()
-            val cameraContainer = UIView()
-            cameraContainer.backgroundColor = UIColor.blackColor
-            cameraContainer.layer.addSublayer(cameraPreviewLayer)
-            cameraPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+    BoxWithConstraints {
+        UIKitView(
+            modifier = Modifier.fillMaxSize().background(color = Color.Black),
+            factory = {
+                val dispatchGroup = dispatch_group_create()
+                val cameraContainer = UIView()
+                cameraContainer.backgroundColor = UIColor.blackColor
+                cameraContainer.layer.addSublayer(cameraPreviewLayer)
+                cameraPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
 
-            dispatch_group_enter(dispatchGroup)
-            dispatch_async(
-                dispatch_get_global_queue(
-                    DISPATCH_QUEUE_PRIORITY_DEFAULT.toLong(),
-                    0UL,
-                ),
-            ) {
-                captureSession.startRunning()
-                dispatch_group_leave(dispatchGroup)
+                dispatch_group_enter(dispatchGroup)
+                dispatch_async(
+                    dispatch_get_global_queue(
+                        DISPATCH_QUEUE_PRIORITY_DEFAULT.toLong(),
+                        0UL,
+                    ),
+                ) {
+                    captureSession.startRunning()
+                    dispatch_group_leave(dispatchGroup)
+                }
+                dispatch_group_notify(dispatchGroup, dispatch_get_main_queue()) {
+                    onCameraReady()
+                }
+                cameraContainer
+            },
+            update = {
+                val rect = with(density) {
+                    CGRectMake( 0.0, 0.0, maxWidth.toPx().toDouble(), maxHeight.toPx().toDouble())
+                }
+                cameraPreviewLayer.setFrame(rect)
             }
-            dispatch_group_notify(dispatchGroup, dispatch_get_main_queue()) {
-                onCameraReady()
-            }
-            cameraContainer
-        },
-        update = { view ->
-            cameraPreviewLayer.setFrame(view.bounds)
-        }
-    )
+        )
+    }
     // Call the triggerCapture lambda when the capture button is clicked
     captureIcon(triggerCapture)
     convertIcon(switchCamera)
@@ -540,6 +548,7 @@ private fun RealDeviceCamera(
     camera: AVCaptureDevice,
     modifier: Modifier,
 ) {
+    val density = LocalDensity.current
     val queue =
         remember {
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT.toLong(), 0UL)
@@ -659,30 +668,35 @@ private fun RealDeviceCamera(
         }
     }
 
-    UIKitView(
-        modifier = modifier,
-        factory = {
-            val dispatchGroup = dispatch_group_create()
-            val cameraContainer = UIView()
-            cameraContainer.backgroundColor = UIColor.blackColor
-            cameraContainer.layer.addSublayer(cameraPreviewLayer)
-            cameraPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+    BoxWithConstraints {
+        UIKitView(
+            modifier = modifier,
+            factory = {
+                val dispatchGroup = dispatch_group_create()
+                val cameraContainer = UIView()
+                cameraContainer.backgroundColor = UIColor.blackColor
+                cameraContainer.layer.addSublayer(cameraPreviewLayer)
+                cameraPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
 
-            dispatch_group_enter(dispatchGroup)
-            dispatch_async(queue) {
-                captureSession.startRunning()
-                dispatch_group_leave(dispatchGroup)
-            }
-            dispatch_group_notify(dispatchGroup, dispatch_get_main_queue()) {
-                state.onCameraReady()
-            }
+                dispatch_group_enter(dispatchGroup)
+                dispatch_async(queue) {
+                    captureSession.startRunning()
+                    dispatch_group_leave(dispatchGroup)
+                }
+                dispatch_group_notify(dispatchGroup, dispatch_get_main_queue()) {
+                    state.onCameraReady()
+                }
 
-            cameraContainer
-        },
-        update = { view ->
-            cameraPreviewLayer.setFrame(view.bounds)
-        }
-    )
+                cameraContainer
+            },
+            update = {
+                val rect = with(density) {
+                    CGRectMake( 0.0, 0.0, maxWidth.toPx().toDouble(), maxHeight.toPx().toDouble())
+                }
+                cameraPreviewLayer.setFrame(rect)
+            }
+        )
+    }
 }
 
 class OrientationListener(
