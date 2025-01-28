@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.UIKitView
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -332,7 +331,6 @@ private fun BoxScope.RealDeviceCamera(
     progressIndicator: @Composable () -> Unit,
     onCapture: (byteArray: ByteArray?) -> Unit,
 ) {
-    val density = LocalDensity.current
     var isFrontCamera by remember { mutableStateOf(camera.position == AVCaptureDevicePositionFront) }
     val capturePhotoOutput = remember { AVCapturePhotoOutput() }
     var actualOrientation by remember {
@@ -526,9 +524,7 @@ private fun BoxScope.RealDeviceCamera(
                 cameraContainer
             },
             update = {
-                val rect = with(density) {
-                    CGRectMake( 0.0, 0.0, maxWidth.toPx().toDouble(), maxHeight.toPx().toDouble())
-                }
+                val rect = CGRectMake( 0.0, 0.0, maxWidth.value.toDouble(), maxHeight.value.toDouble())
                 cameraPreviewLayer.setFrame(rect)
             }
         )
@@ -548,7 +544,6 @@ private fun RealDeviceCamera(
     camera: AVCaptureDevice,
     modifier: Modifier,
 ) {
-    val density = LocalDensity.current
     val queue =
         remember {
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT.toLong(), 0UL)
@@ -690,9 +685,7 @@ private fun RealDeviceCamera(
                 cameraContainer
             },
             update = {
-                val rect = with(density) {
-                    CGRectMake( 0.0, 0.0, maxWidth.toPx().toDouble(), maxHeight.toPx().toDouble())
-                }
+                val rect = CGRectMake( 0.0, 0.0, maxWidth.value.toDouble(), maxHeight.value.toDouble())
                 cameraPreviewLayer.setFrame(rect)
             }
         )
